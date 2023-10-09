@@ -14,7 +14,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./digonto.in/web
-          file: ./Dockerfile
+          file: ./digonto.in/web/Dockerfile
           push: false
           tags: digonto.in/web:latest
 #name: GitHub Actions Demo
