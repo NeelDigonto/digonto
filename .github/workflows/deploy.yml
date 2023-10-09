@@ -1,16 +1,22 @@
 name: Deploy Workflow
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: Deploy Workflow running for ${{ github.event_name }} on ${{ github.ref }}
 on: [push]
 jobs:
   test-deploy:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      - run: echo "Hi, from Workflow!"
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - run: "On commit sha ${{github.sha}}"
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      # Login to ecr
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./digonto.in/web
+          file: ./Dockerfile
+          push: false
+          tags: digonto.in/web:latest
 #name: GitHub Actions Demo
 #run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 #on: [push]
