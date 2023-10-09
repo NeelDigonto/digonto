@@ -2,11 +2,13 @@ name: Deploy Workflow
 run-name: Deploy Workflow running for ${{ github.event_name }} on ${{ github.ref }}
 on: [push]
 jobs:
-  test-deploy:
+  test:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       # Login to ecr
@@ -17,6 +19,7 @@ jobs:
           file: ./digonto.in/web/Dockerfile
           push: false
           tags: digonto.in/web:latest
+          target: test
 #name: GitHub Actions Demo
 #run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 #on: [push]
