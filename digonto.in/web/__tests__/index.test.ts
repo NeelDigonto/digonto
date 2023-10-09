@@ -7,3 +7,5 @@ describe("Dummy Test Suite", () => {
     expect(val).toBeTruthy();
   });
 });
+
+// docker build -t digonto/web:0.0.12 --progress=plain --no-cache --target=test .
