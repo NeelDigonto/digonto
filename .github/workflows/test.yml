@@ -1,14 +1,8 @@
-name: Deploy Workflow
-run-name: Production Deploy Workflow running for ${{ github.event.workflow_run.event }} on ${{ github.ref }}
-on:
-  workflow_run:
-    workflows: ["Run Tests"]
-    branches: [main]
-    types:
-      - completed
+name: Run Tests
+run-name: Test Workflow running for ${{ github.event_name }} on ${{ github.ref }}
+on: [push]
 jobs:
-  production-deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  test:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -20,13 +14,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Login to ecr
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: ./digonto.in/web
           file: ./digonto.in/web/Dockerfile
           push: false
-          tags: digonto.in/web:latest
-          target: prod
+          tags: digonto.in/web-test:latest
+          target: test
           no-cache: true
