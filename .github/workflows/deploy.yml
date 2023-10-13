@@ -43,6 +43,5 @@ jobs:
           push: true
           tags: |
             953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto/web:latest
-            digonto/web:latest
           target: prod
           no-cache: true
