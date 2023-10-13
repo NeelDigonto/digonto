@@ -22,7 +22,7 @@ jobs:
         with:
           aws-region: ap-south-1
           role-to-assume: arn:aws:iam::953253449063:role/digonto-github-role
-          role-session-name: GitHubActionsDigonto
+          #role-session-name: GitHubActionsDigonto
 
       - run: aws sts get-caller-identity
 #      - name: Set up QEMU
