@@ -24,7 +24,9 @@ jobs:
           role-to-assume: arn:aws:iam::953253449063:role/digonto-github-role
           role-session-name: GitHubActionsDigonto
 
-      - run: aws sts get-caller-identity
+      - name: Log AWS STS Info
+        run: aws sts get-caller-identity
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -35,13 +37,15 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: ./digonto.in/web
-          file: ./digonto.in/web/Dockerfile
-          push: true
-          tags: |
-            953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto-web:latest
-          target: prod
-          no-cache: true
+      - name: Remove 'latest' tag
+        run: aws ecr batch-delete-image --repository-name 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto-web --image-ids imageTag=latest
+#      - name: Build and push
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: ./digonto.in/web
+#          file: ./digonto.in/web/Dockerfile
+#          push: true
+#          tags: |
+#            953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto-web:latest
+#          target: prod
+#          no-cache: true
