@@ -43,9 +43,6 @@ jobs:
       #- name: Remove 'latest' tag
       #  run: aws ecr batch-delete-image --repository-name digonto-web --image-ids imageTag=latest --region ap-south-1
 
-      - name: Add Tag Immutability
-        run: aws ecr put-image-tag-mutability --repository-name digonto-web --image-tag-mutability IMMUTABLE --region ap-south-1
-
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -56,3 +53,6 @@ jobs:
             953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto-web:latest
           target: prod
           no-cache: true
+
+      - name: Add Tag Immutability
+        run: aws ecr put-image-tag-mutability --repository-name digonto-web --image-tag-mutability IMMUTABLE --region ap-south-1
