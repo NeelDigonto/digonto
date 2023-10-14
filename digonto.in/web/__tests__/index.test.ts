@@ -8,4 +8,4 @@ describe("Dummy Test Suite", () => {
   });
 });
 
-// docker build -t digonto/web:0.0.12 --progress=plain --no-cache --target=test .
+// docker build -t digonto/web:0.0.12 --progress=plain --no-cache --target=test ../digonto.in/web
