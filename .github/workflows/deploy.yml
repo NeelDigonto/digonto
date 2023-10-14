@@ -48,10 +48,10 @@ jobs:
         shell: bash
 
       - name: Test Image get
-        run: aws ecr batch-get-image --repository-name digonto-web --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output text --query images[].imageManifest
+        run: aws ecr batch-get-image --repository-name digonto-web --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output json | jq --raw-output '.images[].imageManifest'
 
       - name: Obtain image manifest
-        run: MANIFEST=$(aws ecr batch-get-image --repository-name digonto-web --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output text --query images[].imageManifest)
+        run: MANIFEST=$(aws ecr batch-get-image --repository-name digonto-web --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output json | jq --raw-output '.images[].imageManifest')
 
       - name: Retag Image
         run: aws ecr put-image --repository-name digonto-web --image-tag latest --image-manifest "$MANIFEST"
