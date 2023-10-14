@@ -38,9 +38,9 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Remove Tag Immutability
-        run: aws ecr put-image-tag-mutability --repository-name 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto-web --image-tag-mutability MUTABLE --region ap-south-1
+        run: aws ecr put-image-tag-mutability --repository-name digonto-web --image-tag-mutability MUTABLE --region ap-south-1
 #      - name: Remove 'latest' tag
-#        run: aws ecr batch-delete-image --repository-name 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto-web --image-ids imageTag=latest
+#`        run: aws ecr batch-delete-image --repository-name 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto-web --image-ids imageTag=latest
 #      - name: Build and push
 #        uses: docker/build-push-action@v5
 #        with:
