@@ -43,6 +43,9 @@ jobs:
       - name: Build Production Image
         run: docker buildx build --push -t ${{ env.ECR_REPO_URL }}:${{ github.sha }} --progress=plain --no-cache --target=prod ./digonto.in/web
 
+      - name: Remove 'latest' tag
+        run: aws ecr batch-delete-image --repository-name digonto-web --image-ids imageTag=latest --region ap-south-1
+
       - name: Retag Image
         run: |
           MANIFEST=$(aws ecr batch-get-image --repository-name digonto-web --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output json | jq --raw-output '.images[].imageManifest')
@@ -51,8 +54,6 @@ jobs:
 
       - name: Describe Image
         run: aws ecr describe-images --repository-name digonto-web
-#      - name: Remove 'latest' tag
-#        run: aws ecr batch-delete-image --repository-name digonto-web --image-ids imageTag=latest --region ap-south-1
 #      - name: Build and push
 #        uses: docker/build-push-action@v5
 #        with:
