@@ -41,10 +41,19 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build Production Image
-        run: docker buildx build -t ${{ env.ECR_REPO_URL }}:${{ github.sha }} -t ${{ env.ECR_REPO_URL }}:latest --progress=plain --no-cache --target=prod ./digonto.in/web
+        run: docker buildx build --push -t ${{ env.ECR_REPO_URL }}:${{ github.sha }} --progress=plain --no-cache --target=prod ./digonto.in/web
 
       - name: Push Production Image
         run: docker push ${{ env.ECR_REPO_URL }}:${{ github.sha }}
+
+      - name: Obtain image manifest
+        run: MANIFEST=$(aws ecr batch-get-image --repository-name digonto-web --image-ids imageTag=${{ github.sha }} --output text --query images[].imageManifest
+
+      - name: Retag Image
+        run: aws ecr put-image --repository-name digonto-web --image-tag lastest --image-manifest "$MANIFEST"
+
+      - name: Describe Image
+        run: aws ecr describe-images --repository-name digonto-web
 #      - name: Remove 'latest' tag
 #        run: aws ecr batch-delete-image --repository-name digonto-web --image-ids imageTag=latest --region ap-south-1
 #      - name: Build and push
