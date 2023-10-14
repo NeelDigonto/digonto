@@ -47,13 +47,11 @@ jobs:
         run: sleep 5s
         shell: bash
 
-      - name: Obtain image manifest
+      - name: Retag Image
         run: |
           MANIFEST=$(aws ecr batch-get-image --repository-name digonto-web --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output json | jq --raw-output '.images[].imageManifest')
+          aws ecr put-image --repository-name digonto-web --image-tag latest --image-manifest "$MANIFEST"
           echo $MANIFEST
-
-      - name: Retag Image
-        run: aws ecr put-image --repository-name digonto-web --image-tag latest --image-manifest "$MANIFEST"
 
       - name: Describe Image
         run: aws ecr describe-images --repository-name digonto-web
