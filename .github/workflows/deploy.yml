@@ -41,10 +41,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build Production Image
-        run: docker buildx build \
-          -t ${{ env.ECR_REPO_URL }}:${{ github.sha }} \
-          -t ${{ env.ECR_REPO_URL }}:latest \
-          --progress=plain --no-cache --target=prod ./digonto.in/web
+        run: docker buildx build -t ${{ env.ECR_REPO_URL }}:${{ github.sha }} -t ${{ env.ECR_REPO_URL }}:latest --progress=plain --no-cache --target=prod ./digonto.in/web
 
       - name: Push Production Image
         run: docker push ${{ env.ECR_REPO_URL }}:${{ github.sha }}
