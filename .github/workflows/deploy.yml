@@ -42,7 +42,6 @@ jobs:
           file: ./digonto.in/web/Dockerfile
           push: true
           tags: |
-            digonto-web:latest
             953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto-web:latest
           target: prod
           no-cache: true
