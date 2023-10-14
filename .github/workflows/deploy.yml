@@ -43,9 +43,6 @@ jobs:
       - name: Build Production Image
         run: docker buildx build --push -t ${{ env.ECR_REPO_URL }}:${{ github.sha }} --progress=plain --no-cache --target=prod ./digonto.in/web
 
-      - name: Push Production Image
-        run: docker push ${{ env.ECR_REPO_URL }}:${{ github.sha }}
-
       - name: Obtain image manifest
         run: MANIFEST=$(aws ecr batch-get-image --repository-name digonto-web --image-ids imageTag=${{ github.sha }} --output text --query images[].imageManifest
 
