@@ -43,6 +43,10 @@ jobs:
       - name: Build Production Image
         run: docker buildx build --push -t ${{ env.ECR_REPO_URL }}:${{ github.sha }} --progress=plain --no-cache --target=prod ./digonto.in/web
 
+      - name: Sleep for 5 seconds
+        run: sleep 5s
+        shell: bash
+
       - name: Test Image get
         run: aws ecr batch-get-image --repository-name digonto-web --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output text --query images[].imageManifest
 
