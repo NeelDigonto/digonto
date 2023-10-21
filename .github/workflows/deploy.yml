@@ -48,6 +48,7 @@ jobs:
           push: true
           tags: |
             ${{ env.ECR_REPO_URL }}:${{ github.sha }}
+          platforms: linux/amd64,linux/arm64
           target: prod
           no-cache: true
 

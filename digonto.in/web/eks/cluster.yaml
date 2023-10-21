@@ -1,0 +1,14 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: digonto-cluster
+  region: ap-south-1
+
+nodeGroups:
+  - name: ng-1
+    instanceType: t4g.small
+    desiredCapacity: 2
+    volumeSize: 16
+    ssh:
+      allow: false # will use ~/.ssh/id_rsa.pub as the default ssh key
