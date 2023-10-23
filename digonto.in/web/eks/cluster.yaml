@@ -8,7 +8,9 @@ metadata:
 nodeGroups:
   - name: ng-1
     instanceType: t4g.small
-    desiredCapacity: 2
+    minSize: 1
+    maxSize: 5
+    desiredCapacity: 1
     volumeSize: 16
     ssh:
       allow: false # will use ~/.ssh/id_rsa.pub as the default ssh key
