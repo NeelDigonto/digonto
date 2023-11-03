@@ -1,0 +1,9 @@
+apiVersion: getambassador.io/v3alpha1
+kind: Mapping
+metadata:
+  name: digonto-svc-map
+  namespace: digonto
+spec:
+  hostname: "*"
+  prefix: /
+  service: web-cip

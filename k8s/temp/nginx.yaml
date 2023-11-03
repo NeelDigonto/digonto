@@ -1,0 +1,21 @@
+---
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: digonto-ingress
+#  namespace: digonto
+#spec:
+#  ingressClassName: nginx
+#  rules:
+#    - host: "stage.digonto.in"
+#      http:
+#        paths:
+#          - pathType: Prefix
+#            path: "/"
+#            backend:
+#              service:
+#                name: web-cip
+#                port:
+#                  number: 80
+#

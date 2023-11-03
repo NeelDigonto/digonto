@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-depl
+  namespace: digonto
+spec:
+  template:
+    metadata:
+      name: web-pod
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: nginx
+          #image: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto-web
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+      imagePullSecrets:
+        - name: regcred
+  selector:
+    matchLabels:
+      app: web
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%

@@ -1,0 +1,12 @@
+apiVersion: getambassador.io/v3alpha1
+kind: Host
+metadata:
+  name: digonto-host
+  namespace: digonto
+spec:
+  hostname: digonto.in
+  acmeProvider:
+    email: saikatdey2100@gmail.com
+  requestPolicy:
+  insecure:
+    action: Redirect
