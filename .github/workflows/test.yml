@@ -17,8 +17,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./digonto.in/web
-          file: ./digonto.in/web/Dockerfile
+          context: ./web
+          file: ./web/Dockerfile
           push: false
           tags: digonto.in/web-test:latest
           target: test

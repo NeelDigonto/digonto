@@ -43,8 +43,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./digonto.in/web
-          file: ./digonto.in/web/Dockerfile
+          context: ./web
+          file: ./web/Dockerfile
           push: true
           tags: |
             ${{ env.ECR_REPO_URL }}:${{ github.sha }}
