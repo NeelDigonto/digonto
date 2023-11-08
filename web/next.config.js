@@ -3,8 +3,14 @@ const path = require("path");
 
 const nextConfig = {
   output: "standalone",
-  webpack: (config, { isServer }) => {
+  webpack: (config, options) => {
     config.resolve.alias["@"] = path.join(__dirname, "src");
+
+    config.module.rules.push({
+      test: /\.(frag|vert|glsl)$/,
+      type: "asset/source",
+    });
+
     return config;
   },
 };

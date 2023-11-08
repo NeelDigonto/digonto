@@ -47,7 +47,7 @@ const TechStackBadge = () => {};
 const Hero = () => {
   return (
     <HeroContainer>
-      <AboutContainer>
+      {/* <AboutContainer>
         <HeroTitleText>I warmly welcome you to my site.</HeroTitleText>
         <AboutIntroContainer>
           <HeroIntroText>
@@ -71,7 +71,7 @@ const Hero = () => {
             </Body>
           </AboutExperienceContainer>
         </AboutIntroContainer>
-      </AboutContainer>
+      </AboutContainer> */}
     </HeroContainer>
   );
 };
