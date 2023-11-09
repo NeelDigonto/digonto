@@ -29,6 +29,7 @@ export default function RootLayout({
       <link rel="mask-icon" href="favicon.svg" color="#000000" />
       <link rel="apple-touch-icon" href="favicon.svg"></link>
       <body>
+        <canvas className="bg-canvas" id="canvas" />
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>

@@ -1,37 +1,19 @@
-import { RenderEngine } from "./RenderEngine";
+import { BackgroundRenderer } from "./BackgroundRenderer";
 
 export class Engine {
-  renderEngine: RenderEngine | null = null;
+  private backgroundRenderer: BackgroundRenderer;
 
   constructor() {
     console.log("Engine Loaded");
+
+    this.backgroundRenderer = new BackgroundRenderer(this);
   }
 
-  initializeRenderEngine(
-    canvas: HTMLCanvasElement,
-    width: number,
-    height: number
-  ) {
-    this.renderEngine = new RenderEngine(this, canvas, width, height);
+  startBackgroundRenderer() {
+    this.backgroundRenderer.start();
   }
 
-  resizeRenderer(width: number, height: number) {
-    if (!this.renderEngine) {
-      console.warn("Render Engine not present during resize.");
-    }
-  }
-
-  startRender() {
-    if (!this.renderEngine) {
-      console.warn("No Render Engine during start.");
-      return;
-    }
-
-    this.renderEngine?.start();
-  }
-
-  destroyRenderEngine() {
-    this.renderEngine?.destroy();
-    this.renderEngine = null;
+  destroyBackgroundRenderer() {
+    this.backgroundRenderer.destroy();
   }
 }

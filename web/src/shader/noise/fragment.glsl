@@ -39,14 +39,14 @@ float lines(vec2 uv, float offset){
 mat2 rotate2D(float angle){
     return mat2(
         cos(angle), -sin(angle),
-        sin(angle), cos(angle)
+        sin(angle),  cos(angle)
     );
 }
 
 float random(vec2 p){
     vec2 K1 = vec2(
         23.14069263277926, // e^pi (Gelfond's constant)
-         2.665144142690225 // 2^sqrt(2) (Gelfond–Schneider constant)
+        2.665144142690225 // 2^sqrt(2) (Gelfond–Schneider constant)
     );
 
     return fract( cos( dot(p,K1) ) * 12345.6789 );

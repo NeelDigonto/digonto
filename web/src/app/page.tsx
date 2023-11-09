@@ -18,42 +18,12 @@ export default function Home() {
 
   React.useInsertionEffect(() => {
     if (!window.engine) window.engine = new Engine();
+
+    window.engine.startBackgroundRenderer();
   });
-
-  const onResize = React.useCallback(() => {
-    if (!canvasRef.current) {
-      console.warn("canvasRef is still Null.");
-      return;
-    }
-
-    window.engine.resizeRenderer(
-      canvasRef.current.clientWidth,
-      canvasRef.current.clientHeight
-    );
-  }, []);
-
-  React.useEffect(() => {
-    if (!canvasRef.current) return;
-
-    window.engine.initializeRenderEngine(
-      canvasRef.current,
-      canvasRef.current.clientWidth,
-      canvasRef.current.clientHeight
-    );
-
-    window.addEventListener("resize", onResize);
-
-    window.engine.startRender();
-
-    return () => {
-      window.removeEventListener("resize", onResize);
-      window.engine.destroyRenderEngine();
-    };
-  }, []);
 
   return (
     <React.Fragment>
-      <Canvas className="bg-canvas" ref={canvasRef} />
       <main>
         <Hero />
       </main>
