@@ -16,6 +16,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Saikat's garden",
   description: "Saikat's garden",
+  icons: { icon: "/favicon.svg", apple: "/favicon.svg" },
 };
 
 export default function RootLayout({
@@ -25,9 +26,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.className}>
-      <link rel="icon" href="favicon.svg" />
-      <link rel="mask-icon" href="favicon.svg" color="#000000" />
-      <link rel="apple-touch-icon" href="favicon.svg"></link>
       <body>
         <canvas className="bg-canvas" id="canvas" />
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>

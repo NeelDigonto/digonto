@@ -16,8 +16,8 @@ const BadgeContainer = styled.div`
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 
-  width: 10rem;
-  min-width: 10rem;
+  width: 9rem;
+  min-width: 9rem;
 `;
 
 const Badge: React.FC<BadgeProps> = (props) => {

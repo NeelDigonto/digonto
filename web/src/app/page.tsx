@@ -14,8 +14,6 @@ const Canvas = styled.canvas`
 `;
 
 export default function Home() {
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
-
   React.useInsertionEffect(() => {
     if (!window.engine) window.engine = new Engine();
 

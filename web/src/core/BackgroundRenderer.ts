@@ -94,7 +94,7 @@ export class BackgroundRenderer {
 
     this.stats = new Stats();
     this.stats.showPanel(1);
-    document.body.appendChild(this.stats.dom);
+    //document.body.appendChild(this.stats.dom);
   }
 
   private resize() {
@@ -108,7 +108,7 @@ export class BackgroundRenderer {
   }
 
   private animate(timestamp: number) {
-    this.material.uniforms.time.value = timestamp / 2000;
+    this.material.uniforms.time.value = timestamp / 5_000;
 
     this.renderer.render(this.scene, this.camera);
 

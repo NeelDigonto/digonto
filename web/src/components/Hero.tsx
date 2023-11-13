@@ -16,12 +16,22 @@ const HeroContainer = styled.section`
 const AboutContainer = styled.div`
   position: absolute;
   right: 0;
-  padding-right: 4rem;
 
   //display: flex;
   //flex-direction: column;
   //justify-content: center;
   //row-gap: 2rem;
+
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+
+  border-radius: 1rem;
+
+  backdrop-filter: blur(50px);
+  box-shadow: rgb(0 0 0 / 2%) 0px 1px 0px 0px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const AboutIntroContainer = styled.div`
@@ -42,12 +52,10 @@ const AboutTechStackContainer = styled.div`
 
 const AboutExperienceContainer = styled.div``;
 
-const TechStackBadge = () => {};
-
 const Hero = () => {
   return (
     <HeroContainer>
-      {/* <AboutContainer>
+      <AboutContainer>
         <HeroTitleText>I warmly welcome you to my site.</HeroTitleText>
         <AboutIntroContainer>
           <HeroIntroText>
@@ -71,7 +79,7 @@ const Hero = () => {
             </Body>
           </AboutExperienceContainer>
         </AboutIntroContainer>
-      </AboutContainer> */}
+      </AboutContainer>
     </HeroContainer>
   );
 };
