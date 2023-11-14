@@ -5,8 +5,11 @@ export const Blog = defineDocumentType(() => ({
   filePathPattern: `**/*.mdx`,
   contentType: "mdx",
   fields: {
+    route: { type: "string", required: true },
     title: { type: "string", required: true },
-    date: { type: "date", required: true },
+    abstract: { type: "string", required: true },
+    publishedOn: { type: "date", required: true },
+    lastUpdated: { type: "date", required: true },
   },
   computedFields: {
     url: {

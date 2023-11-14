@@ -9,7 +9,7 @@ export default function BlogHomePage({
   children: React.ReactNode;
 }) {
   const blogs = allBlogs.sort((a, b) =>
-    compareDesc(new Date(a.date), new Date(b.date))
+    compareDesc(new Date(a.publishedOn), new Date(b.publishedOn))
   );
 
   return (
