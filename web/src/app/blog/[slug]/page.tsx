@@ -5,11 +5,13 @@ import type { Metadata } from "next";
 import React from "react";
 // import { notFound } from 'next/navigation'
 
+//  blog._raw.flattenedPath
+
 export const generateStaticParams = async () =>
-  allBlogs.map((blog) => ({ slug: blog._raw.flattenedPath }));
+  allBlogs.map((blog) => ({ slug: blog.route }));
 
 export const generateMetadata = ({ params }: { params: { slug: string } }) => {
-  const blog = allBlogs.find((blog) => blog._raw.flattenedPath === params.slug);
+  const blog = allBlogs.find((blog) => blog.route === params.slug);
 
   if (!blog) throw new Error(`Blog not found for slug: ${params.slug}`);
 
@@ -22,7 +24,7 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
 };
 
 const BlogLayout = ({ params }: { params: { slug: string } }) => {
-  const blog = allBlogs.find((blog) => blog._raw.flattenedPath === params.slug);
+  const blog = allBlogs.find((blog) => blog.route === params.slug);
 
   if (!blog) throw new Error(`Blog not found for slug: ${params.slug}`);
 
