@@ -1,13 +1,10 @@
 const path = require("path");
-const withMDX = require("@next/mdx")();
+const { withContentlayer } = require("next-contentlayer");
 
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
   output: "standalone",
-
-  // Configure `pageExtensions` to include MDX files
-  pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
 
   webpack: (config, options) => {
     config.resolve.alias["@"] = path.join(__dirname, "src");
@@ -21,4 +18,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withMDX(nextConfig);
+module.exports = withContentlayer(nextConfig);
