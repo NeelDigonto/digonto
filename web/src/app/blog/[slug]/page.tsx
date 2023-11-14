@@ -8,10 +8,14 @@ import React from "react";
 //  blog._raw.flattenedPath
 
 export const generateStaticParams = async () =>
-  allBlogs.map((blog) => ({ slug: blog.route }));
+  allBlogs
+    .filter((blog) => blog.isPublished)
+    .map((blog) => ({ slug: blog.route }));
 
 export const generateMetadata = ({ params }: { params: { slug: string } }) => {
-  const blog = allBlogs.find((blog) => blog.route === params.slug);
+  const blog = allBlogs
+    .filter((blog) => blog.isPublished)
+    .find((blog) => blog.route === params.slug);
 
   if (!blog) throw new Error(`Blog not found for slug: ${params.slug}`);
 
@@ -24,7 +28,9 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
 };
 
 const BlogLayout = ({ params }: { params: { slug: string } }) => {
-  const blog = allBlogs.find((blog) => blog.route === params.slug);
+  const blog = allBlogs
+    .filter((blog) => blog.isPublished)
+    .find((blog) => blog.route === params.slug);
 
   if (!blog) throw new Error(`Blog not found for slug: ${params.slug}`);
 

@@ -8,6 +8,7 @@ export const Blog = defineDocumentType(() => ({
     route: { type: "string", required: true },
     title: { type: "string", required: true },
     abstract: { type: "string", required: true },
+    isPublished: { type: "boolean", required: true },
     publishedOn: { type: "date", required: true },
     lastUpdated: { type: "date", required: true },
   },
