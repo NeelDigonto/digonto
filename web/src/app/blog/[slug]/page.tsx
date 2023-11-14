@@ -1,12 +1,16 @@
 import { format, parseISO } from "date-fns";
 import { allBlogs } from "contentlayer/generated";
+import { useMDXComponent } from "next-contentlayer/hooks";
 import type { Metadata } from "next";
+import React from "react";
+// import { notFound } from 'next/navigation'
 
 export const generateStaticParams = async () =>
   allBlogs.map((blog) => ({ slug: blog._raw.flattenedPath }));
 
 export const generateMetadata = ({ params }: { params: { slug: string } }) => {
   const blog = allBlogs.find((blog) => blog._raw.flattenedPath === params.slug);
+
   if (!blog) throw new Error(`Blog not found for slug: ${params.slug}`);
 
   const metadata: Metadata = {
@@ -19,10 +23,25 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
 
 const BlogLayout = ({ params }: { params: { slug: string } }) => {
   const blog = allBlogs.find((blog) => blog._raw.flattenedPath === params.slug);
+
   if (!blog) throw new Error(`Blog not found for slug: ${params.slug}`);
 
+  // 404 if the post does not exist.
+  //if (!post) notFound();
+
+  // Parse the MDX file via the useMDXComponent hook.
+  const MDXContent = useMDXComponent(blog.body.code);
+
   return (
-    <article className="mx-auto max-w-xl py-8">
+    <React.Fragment>
+      <MDXContent />
+    </React.Fragment>
+  );
+};
+
+export default BlogLayout;
+/**
+ <article className="mx-auto max-w-xl py-8">
       <div className="mb-8 text-center">
         <time dateTime={blog.date} className="mb-1 text-xs text-gray-600">
           {format(parseISO(blog.date), "LLLL d, yyyy")}
@@ -34,7 +53,4 @@ const BlogLayout = ({ params }: { params: { slug: string } }) => {
         dangerouslySetInnerHTML={{ __html: blog.body.html }}
       />
     </article>
-  );
-};
-
-export default BlogLayout;
+ */
