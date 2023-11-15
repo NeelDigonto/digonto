@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Body, HeroIntroText, HeroTitleText } from "@/components/Text";
 import Image from "next/image";
 import Badge from "./Badge";
 
@@ -50,6 +49,18 @@ const AboutTechStackContainer = styled.div`
   justify-content: flex-start;
 `;
 
+export const HeroTitleText = styled.h1`
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+`;
+
+export const HeroIntroText = styled.h2`
+  font-size: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.1rem;
+`;
+
 const AboutExperienceContainer = styled.div``;
 
 const Hero = () => {
@@ -74,9 +85,9 @@ const Hero = () => {
             <Badge src="/ThreeJS.svg" text="ThreeJS" />
           </AboutTechStackContainer>
           <AboutExperienceContainer>
-            <Body>
+            <div>
               You will soon find blogs and many cool experiments on this site.
-            </Body>
+            </div>
           </AboutExperienceContainer>
         </AboutIntroContainer>
       </AboutContainer>

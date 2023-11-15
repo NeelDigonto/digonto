@@ -3,6 +3,7 @@ import { allBlogs } from "contentlayer/generated";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import type { Metadata } from "next";
 import React from "react";
+import BlogStructure from "@/components/BlogStructure";
 // import { notFound } from 'next/navigation'
 
 //  blog._raw.flattenedPath
@@ -42,23 +43,10 @@ const BlogLayout = ({ params }: { params: { slug: string } }) => {
 
   return (
     <React.Fragment>
-      <MDXContent />
+      <BlogStructure {...{ blog, MDXContent: <MDXContent /> }} />
+      {/* <MDXContent /> */}
     </React.Fragment>
   );
 };
 
 export default BlogLayout;
-/**
- <article className="mx-auto max-w-xl py-8">
-      <div className="mb-8 text-center">
-        <time dateTime={blog.date} className="mb-1 text-xs text-gray-600">
-          {format(parseISO(blog.date), "LLLL d, yyyy")}
-        </time>
-        <h1 className="text-3xl font-bold">{blog.title}</h1>
-      </div>
-      <div
-        className="[&>*]:mb-3 [&>*:last-child]:mb-0"
-        dangerouslySetInnerHTML={{ __html: blog.body.html }}
-      />
-    </article>
- */
