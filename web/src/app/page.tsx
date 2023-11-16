@@ -14,9 +14,12 @@ export default function Home() {
 
   return (
     <React.Fragment>
-      <main className="homeMain">
-        <Hero />
-      </main>
+      <body style={{ backgroundColor: "transparent" }}>
+        <canvas className="bg-canvas" id="canvas" />
+        <main className="homeMain">
+          <Hero />
+        </main>
+      </body>
     </React.Fragment>
   );
 }

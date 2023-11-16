@@ -16,7 +16,7 @@ interface BlogStructureProps {
   MDXContent: any;
 }
 
-const BlogContainer = styled.main`
+const BlogContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr min(38rem, calc(100% - 64px)) 1fr;
   grid-column-gap: 32px;
@@ -24,6 +24,8 @@ const BlogContainer = styled.main`
   > * {
     grid-column: 2;
   }
+
+  margin-bottom: 10rem; /* temporary */
 `;
 
 const FullBleedContainer = styled.img`
@@ -50,12 +52,14 @@ const BlogStructure: React.FC<BlogStructureProps> = (props) => {
     <React.Fragment>
       <BlogHeaderPadding />
       <Header />
-      <BlogContainer>
-        <BlogMeta>
-          <h1>{props.blog.title}</h1>
-        </BlogMeta>
-        <BlogContent>{props.MDXContent}</BlogContent>
-      </BlogContainer>
+      <main>
+        <BlogContainer>
+          <BlogMeta>
+            <h1>{props.blog.title}</h1>
+          </BlogMeta>
+          <BlogContent>{props.MDXContent}</BlogContent>
+        </BlogContainer>
+      </main>
     </React.Fragment>
   );
 };

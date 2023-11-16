@@ -11,8 +11,8 @@ tags:
 coverImage: ""
 ---
 
-import ContentTable from "@/components/ContentTable";
-
+import Note from "@/components/Note";
+import Roadmap from "@/components/Roadmap";
 
 Relax! You have come to the the right place. 
 <br/>
@@ -23,15 +23,24 @@ We will also look at GitOps & AWS best practises, by deploying a production grad
 and using terraform for setting up a resilient infrastructure.
 <br/>
 
+<Note>
 This guide if meant for beginers and seasoned developers alike. Beginers will start with best practises in the industry, and
 more advanced users can take a look at the implmentation of latest tech like karpenter for AWS EKS and so on.
+</Note>
 <br/>
 
 
-# Roadmap
+<Roadmap checkpoints={[
+        "Setup AWS Infrastructure with terraform.",
+        "Use Helm Charts to install karpenter and prometheus.",
+        "Choose and install ingress controller and service mesh of our choice.",
+        "Dockerize a basic Nextjs | NodeJS App with AIML.",
+        "Deploy a Production CI/CD pipeline.",
+    ]}/>
 
 
-{/* Roadmap */}
+
+
 
 {/* Prerequisite */}
 

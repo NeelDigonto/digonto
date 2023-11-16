@@ -5,6 +5,8 @@ import StyledComponentsRegistry from "@/lib/registry";
 
 import "@/styles/reset.css";
 import "@/styles/globals.css";
+import "@/styles/note.css";
+import "@/styles/roadmap.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,10 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.className}>
-      <body>
-        <canvas className="bg-canvas" id="canvas" />
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-      </body>
+      <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
     </html>
   );
 }

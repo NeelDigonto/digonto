@@ -1,0 +1,12 @@
+.noteRoot {
+  background-color: oklch(25% 16% 260);
+  color: var(--text-tertiary-color);
+
+  padding: 1rem;
+  border-radius: 0.5rem;
+
+  @media (min-width: calc(38rem + 64px + 2rem)) {
+    margin-left: -32px;
+    margin-right: -32px;
+  }
+}
