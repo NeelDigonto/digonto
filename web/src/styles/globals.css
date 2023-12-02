@@ -80,7 +80,7 @@ main {
 }
 
 h1 {
-  font-size: 1.9rem;
+  font-size: 2rem;
   font-weight: 600;
   letter-spacing: 0.1rem;
 
@@ -88,10 +88,9 @@ h1 {
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 500;
   letter-spacing: 0.075rem;
-  opacity: 90%;
 }
 
 h3 {
