@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "testw": "vitest watch",
-    "test": "vitest run"
+    "testw": "VITE_CJS_IGNORE_WARNING=true vitest watch",
+    "test": "VITE_CJS_IGNORE_WARNING=true vitest run"
   },
   "dependencies": {
     "next": "14.1.0",
