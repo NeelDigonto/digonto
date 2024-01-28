@@ -1,0 +1,14 @@
+.headerRoot {
+  display: grid;
+  grid-template-columns: 1fr min(50rem, calc(100% - 64px)) 1fr;
+  grid-column-gap: 32px;
+
+  > * {
+    grid-column: 2;
+  }
+
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+}

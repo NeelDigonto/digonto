@@ -1,0 +1,12 @@
+.badgeContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  column-gap: 0.75rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+
+  width: 9rem;
+  min-width: 9rem;
+}

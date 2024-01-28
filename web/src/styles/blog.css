@@ -1,0 +1,30 @@
+.blogContainer {
+  display: grid;
+  grid-template-columns: 1fr min(38rem, calc(100% - 64px)) 1fr;
+  grid-column-gap: 32px;
+
+  > * {
+    grid-column: 2;
+  }
+
+  margin-bottom: 10rem; /* temporary */
+}
+
+.fullBleedContainer {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+.blogHeaderPadding {
+  width: 100%;
+  height: 12rem;
+}
+
+.blogMeta {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.blogContent {
+  padding-top: 2rem;
+}

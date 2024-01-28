@@ -1,0 +1,7 @@
+.roadmapRoot {
+  background-color: oklch(30% 10% 60);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-left: -32px;
+  margin-right: -32px;
+}
