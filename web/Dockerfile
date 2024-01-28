@@ -19,6 +19,8 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --include=dev
+# for vitest: Error: EACCES: permission denied, mkdir '/usr/src/app/node_modules/.vitest/deps_temp_f1031923'
+RUN chown -R node:node /app/node_modules  
 USER node
 COPY . .
 RUN npm run test
