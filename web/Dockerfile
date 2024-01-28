@@ -1,4 +1,4 @@
-ARG NODE_VERSION=20.11.0
+ARG NODE_VERSION=18.18.2
 
 FROM node:${NODE_VERSION}-bookworm-slim as base
 WORKDIR /usr/src/app
@@ -19,8 +19,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --include=dev
-# for vitest: Error: EACCES: permission denied, mkdir '/usr/src/app/node_modules/.vitest/deps_temp_f1031923'
-#USER node
+USER node
 COPY . .
 RUN npm run test
 
@@ -43,7 +42,7 @@ USER node
 COPY --from=prodbuild /usr/src/app/node_modules ./node_modules
 COPY --from=prodbuild /usr/src/app/package.json ./package.json
 COPY --from=prodbuild /usr/src/app/package-lock.json ./package-lock.json
-COPY --from=prodbuild /usr/src/app/next.config.js ./next.config.js
+COPY --from=prodbuild /usr/src/app/next.config.mjs ./next.config.mjs
 COPY --from=prodbuild /usr/src/app/.next ./.next
 CMD ["npm", "run", "start"]
 
