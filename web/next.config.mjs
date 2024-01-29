@@ -1,10 +1,13 @@
-import path from 'path'
-import { fileURLToPath } from 'url';
+import path from "path";
+import { fileURLToPath } from "url";
+import nextMDX from "@next/mdx";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
+
   webpack: (config, options) => {
     config.resolve.alias["@"] = path.join(__dirname, "src");
 
@@ -17,4 +20,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default nextMDX()(nextConfig);

@@ -31,19 +31,17 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) or (prefers-color-scheme: light) {
+  html {
+    color-scheme: dark;
+  }
+
   :root {
     --background-color: oklch(18.5%, 3.75%, 250);
 
     --text-primary-color: oklch(100% 10% 240 / 1);
     --text-secondary-color: oklch(90% 5% 240 / 1);
     --text-tertiary-color: oklch(90% 5% 240 / 1);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
   }
 }
 
