@@ -6,10 +6,13 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.svg", apple: "/favicon.svg" },
 };
 
-export default function RootLayout({
+
+export default function BlogLayout({
   children,
+  ...other
 }: {
   children: React.ReactNode;
 }) {
+  console.log(meta)
   return <body>{children}</body>;
 }
