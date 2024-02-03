@@ -1,19 +1,21 @@
-import Fastify, { FastifyInstance } from 'fastify';
 import { StatusCodes } from 'http-status-codes';
+import express, { Express, Request, Response } from 'express';
 
 export class Gateway {
-  server: FastifyInstance;
+  expressServer: Express;
 
   constructor() {
-    this.server = Fastify({
-      logger: false,
-    });
+    this.expressServer = express();
 
     this.registerRoutes();
   }
 
   registerRoutes() {
-    this.server.post('/web/new-request', async (request, reply) => {
+    this.expressServer.get('/', async (request, reply) => {
+      reply.status(200).send('OK');
+    });
+
+    this.expressServer.post('/web/new-request', async (request, reply) => {
       try {
         /*       const FilterParseRes = FilterV.safeParse(request.body as Filter);
       if (!FilterParseRes.success) {
@@ -23,12 +25,10 @@ export class Gateway {
 
       const logs: LogD[] = await find_log(this.pgPool, FilterParseRes.data); */
 
-        return (
-          reply
-            .status(StatusCodes.OK)
-            //.header('Content-Type', 'application/json')
-            .send('OK')
-        );
+        reply
+          .status(StatusCodes.OK)
+          //.header('Content-Type', 'application/json')
+          .send('OK');
       } catch (error) {
         reply.status(StatusCodes.INTERNAL_SERVER_ERROR);
       }
@@ -37,9 +37,10 @@ export class Gateway {
 
   async run() {
     try {
-      await this.server.listen({ port: 4000 });
+      await this.expressServer.listen(4000, '0.0.0.0', () => {
+        console.log('Listening on Port: 4000');
+      });
     } catch (err) {
-      this.server.log.error(err);
       process.exit(1);
     }
   }

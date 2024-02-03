@@ -10,9 +10,10 @@ services:
     build:
       context: gateway
       target: dev
-    command: ["npm", "run", "dev"]
     ports:
       - 4000:4000
+    expose:
+      - 4000
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
@@ -20,8 +21,6 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_DB: dev
       PORT: 4000
-    networks:
-      - digonto
     volumes:
       - ./gateway:/app/
       - gateway-nodemodules:/app/node_modules
@@ -31,13 +30,10 @@ services:
     build:
       context: web
       target: dev
-    command: ["npm", "run", "dev"]
     ports:
       - 3000:3000
     environment:
       PORT: 3000
-    networks:
-      - digonto
     volumes:
       - ./web:/app/
       - web-nodemodules:/app/node_modules
@@ -47,7 +43,3 @@ services:
 volumes:
   gateway-nodemodules: {}
   web-nodemodules: {}
-
-networks:
-  digonto:
-    driver: bridge

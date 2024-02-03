@@ -1,4 +1,4 @@
-ARG NODE_VERSION=18.18.2
+ARG NODE_VERSION=20.11.0
 
 FROM node:${NODE_VERSION}-bookworm as base
 WORKDIR /app

@@ -43,7 +43,7 @@ const Post = async ({ params: { slug } }: { params: { slug: string } }) => {
     }
   );
 
-  return <div>a{content}</div>;
+  return <div>{content}</div>;
 };
 
 export default Post;
