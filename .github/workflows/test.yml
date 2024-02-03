@@ -14,15 +14,16 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Test Gateway
+      - name: Test Web
         uses: docker/build-push-action@v5
         with:
-          context: ./gateway
-          file: ./gateway/Dockerfile
+          context: ./web
+          file: ./web/Dockerfile
           push: false
-          tags: digonto.in/gateway-test:latest
+          tags: digonto.in/web-test:latest
           target: test
           no-cache: true
+      
 
   gateway_test:
     runs-on: ubuntu-22.04
@@ -35,13 +36,13 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
-      - name: Test Web
+
+      - name: Test Gateway
         uses: docker/build-push-action@v5
         with:
-          context: ./web
-          file: ./web/Dockerfile
+          context: ./gateway
+          file: ./gateway/Dockerfile
           push: false
-          tags: digonto.in/web-test:latest
+          tags: digonto.in/gateway-test:latest
           target: test
           no-cache: true
