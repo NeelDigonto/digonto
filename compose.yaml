@@ -4,6 +4,8 @@ services:
     image: postgres:16.1
     environment:
       POSTGRES_PASSWORD: 123
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
   gateway:
@@ -43,3 +45,4 @@ services:
 volumes:
   gateway-nodemodules: {}
   web-nodemodules: {}
+  pgdata: {}
