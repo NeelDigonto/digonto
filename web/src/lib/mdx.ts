@@ -50,7 +50,6 @@ export async function getPostBySlug(
     options: { parseFrontmatter: true, mdxOptions: {} },
   });
 
-  console.log(frontmatter);
   const validationResult = mdxFrontmatterSchema.safeParse(frontmatter);
   if (!validationResult.success) {
     throw new Error(`

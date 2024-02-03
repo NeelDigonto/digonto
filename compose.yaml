@@ -1,0 +1,53 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:16.1
+    environment:
+      POSTGRES_PASSWORD: 123
+    ports:
+      - 5432:5432
+  gateway:
+    build:
+      context: gateway
+      target: dev
+    command: ["npm", "run", "dev"]
+    ports:
+      - 4000:4000
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: dev
+      PORT: 4000
+    networks:
+      - digonto
+    volumes:
+      - ./gateway:/app/
+      - gateway-nodemodules:/app/node_modules
+    depends_on:
+      - postgres
+  web:
+    build:
+      context: web
+      target: dev
+    command: ["npm", "run", "dev"]
+    ports:
+      - 3000:3000
+    environment:
+      PORT: 3000
+    networks:
+      - digonto
+    volumes:
+      - ./web:/app/
+      - web-nodemodules:/app/node_modules
+    depends_on:
+      - gateway
+
+volumes:
+  gateway-nodemodules: {}
+  web-nodemodules: {}
+
+networks:
+  digonto:
+    driver: bridge

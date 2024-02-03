@@ -1,5 +1,7 @@
 import { getAllPosts, getPostBySlug } from "@/lib/mdx";
+import axios from "axios";
 import { Metadata } from "next";
+import { cookies, headers } from "next/headers";
 
 export const generateStaticParams = async () =>
   (await getAllPosts())
@@ -27,8 +29,21 @@ export const generateMetadata = async ({
 
 const Post = async ({ params: { slug } }: { params: { slug: string } }) => {
   const { content } = await getPostBySlug(slug);
+  const headersList = headers();
 
-  return <div>{content}</div>;
+  const headerKVs: [string, string][] = [];
+  headersList.forEach((value, key, parent) => headerKVs.push([key, value]));
+  await axios.post(
+    "http://gateway:4000/web/new-request",
+    { headerKVs: headerKVs },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return <div>a{content}</div>;
 };
 
 export default Post;

@@ -1,4 +1,4 @@
-ARG NODE_VERSION=18.18.2
+ARG NODE_VERSION=20.11.0
 
 FROM node:${NODE_VERSION}-bookworm as base
 WORKDIR /app
@@ -41,7 +41,5 @@ USER node
 COPY --from=prodbuild /app/node_modules ./node_modules
 COPY --from=prodbuild /app/package.json ./package.json
 COPY --from=prodbuild /app/package-lock.json ./package-lock.json
-COPY --from=prodbuild /app/next.config.mjs ./next.config.mjs
-COPY --from=prodbuild /app/.next ./.next
+COPY --from=prodbuild /app/dist ./dist
 CMD ["npm", "run", "start"]
-
