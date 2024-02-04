@@ -23,6 +23,7 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_DB: dev
       PORT: 4000
+      NODE_ENV: dev
     volumes:
       - ./gateway:/app/
       - gateway-nodemodules:/app/node_modules
@@ -36,6 +37,7 @@ services:
       - 3000:3000
     environment:
       PORT: 3000
+      NODE_ENV: dev
     volumes:
       - ./web:/app/
       - web-nodemodules:/app/node_modules

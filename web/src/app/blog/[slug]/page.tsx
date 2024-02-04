@@ -1,3 +1,4 @@
+import { newWebRequest } from "@/lib/analytics";
 import { getAllPosts, getPostBySlug } from "@/lib/mdx";
 import axios from "axios";
 import { Metadata } from "next";
@@ -6,7 +7,7 @@ import { cookies, headers } from "next/headers";
 export const generateStaticParams = async () =>
   (await getAllPosts())
     .filter((post) => post.frontmatter.isPublished)
-    .map((post) => ({ slug: post.frontmatter.route }));
+    .map((post) => ({ slug: post.frontmatter.route, content: post.content }));
 
 export const generateMetadata = async ({
   params,
@@ -27,21 +28,11 @@ export const generateMetadata = async ({
   return metadata;
 };
 
-const Post = async ({ params: { slug } }: { params: { slug: string } }) => {
-  const { content } = await getPostBySlug(slug);
-  const headersList = headers();
+const Post = async ({ params }: { params: { slug: string } }) => {
+  const { content } = await getPostBySlug(params.slug);
+  console.log(params);
 
-  const headerKVs: [string, string][] = [];
-  headersList.forEach((value, key, parent) => headerKVs.push([key, value]));
-  await axios.post(
-    "http://gateway:4000/web/new-request",
-    { headerKVs: headerKVs },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  await newWebRequest(`/blog/${params.slug}`, headers(), cookies());
 
   return <div>{content}</div>;
 };

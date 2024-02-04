@@ -75,7 +75,7 @@ export async function getPostBySlug(
 export async function getAllPosts() {
   const fileNames = fs.readdirSync(rootMDXDirectory);
 
-  let posts = [];
+  let posts: PostDescription[] = [];
 
   for (const fileName of fileNames) {
     posts.push(await getPostBySlug(fileName));
