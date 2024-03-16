@@ -20,6 +20,10 @@ export class Gateway {
   }
 
   registerRoutes() {
+    this.fastifyServer.get('/health', async (request, reply) => {
+      reply.status(StatusCodes.OK).send('OK');
+    });
+
     this.fastifyServer.post('/web/new-request', async (request, reply) => {
       try {
         const bodyParseRes = webRequestAPISchema.safeParse(request.body);
