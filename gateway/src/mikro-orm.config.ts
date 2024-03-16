@@ -28,8 +28,8 @@ const config: Options = {
   extensions: [Migrator],
   migrations: {
     tableName: 'mikro_orm_migrations', // name of database table with log of executed transactions
-    path: './migrations', // path to the folder with migrations
-    pathTs: undefined, // path to the folder with TS migrations (if used, you should put path to compiled files in `path`)
+    path: './dist/migrations', // path to the folder with migrations
+    pathTs: './migrations', // path to the folder with TS migrations (if used, you should put path to compiled files in `path`)
     glob: '!(*.d).{js,ts}', // how to match migration files (all .js and .ts files, but not .d.ts)
     transactional: true, // wrap each migration in a transaction
     disableForeignKeys: false, // wrap statements with `set foreign_key_checks = 0` or equivalent, I changed to false

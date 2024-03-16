@@ -1,26 +1,19 @@
-import {
-  //  EntityManager,
-  //  EntityRepository,
-  MikroORM,
-  /* Options, */
-} from '@mikro-orm/postgresql';
+import { MikroORM } from '@mikro-orm/postgresql';
 import config from '@/mikro-orm.config';
 
-// export interface Services {
-//   orm: MikroORM;
-//   em: EntityManager;
-//   webrequest: EntityRepository<WebRequest>;
-// }
-
-// let cache: Services;
 let cachedOrm: MikroORM;
 
-export async function initORM(/* options?: Options */): Promise<MikroORM> {
+export async function initORM(/* migrationPath?:string */): Promise<MikroORM> {
   if (cachedOrm) {
     return cachedOrm;
   }
 
-  const orm = await MikroORM.init(config);
+  const orm = await MikroORM.init({
+    ...config,
+    /* migrations: {
+      ...config.migrations,
+    }, */
+  });
 
   // save to cache before returning
   return (cachedOrm = orm);

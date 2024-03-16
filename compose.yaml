@@ -19,7 +19,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
-      POSTGRES_HOST: localhost
+      POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       POSTGRES_DB: dev
       PORT: 4000
@@ -27,6 +27,7 @@ services:
     volumes:
       - ./gateway:/app/
       - gateway-nodemodules:/app/node_modules
+      #- gateway-dist:/app/dist
     depends_on:
       - postgres
   web:
@@ -46,5 +47,6 @@ services:
 
 volumes:
   gateway-nodemodules: {}
+  gateway-dist: {}
   web-nodemodules: {}
   pgdata: {}
