@@ -30,7 +30,6 @@ export const generateMetadata = async ({
 
 const Post = async ({ params }: { params: { slug: string } }) => {
   const { content } = await getPostBySlug(params.slug);
-  console.log(params);
 
   await newWebRequest(`/blog/${params.slug}`, headers(), cookies());
 

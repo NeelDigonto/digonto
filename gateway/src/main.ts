@@ -1,5 +1,4 @@
-import "dotenv/config";
-import { Gateway } from './gateway/gateway';
+import { Gateway } from '@/gateway/Gateway';
 
 const gateway = new Gateway();
 gateway.run();

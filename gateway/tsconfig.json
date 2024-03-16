@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "CommonJS",
     "allowJs": false,
     "removeComments": true,
     "resolveJsonModule": true,
@@ -16,12 +16,12 @@
     "emitDecoratorMetadata": true,
     "declaration": true,
     "moduleResolution": "Node",
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "__tests__/**/*"],
+  "include": ["src/**/*", "__tests__/**/*", "migrations/**/*"],
   "exclude": ["node_modules"]
 }

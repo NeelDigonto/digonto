@@ -1,30 +1,27 @@
-import { WebRequest } from '@/modules/WebRequest/WebRequest.entity';
 import {
-  EntityManager,
-  EntityRepository,
+  //  EntityManager,
+  //  EntityRepository,
   MikroORM,
-  Options,
+  /* Options, */
 } from '@mikro-orm/postgresql';
+import config from '@/mikro-orm.config';
 
-export interface Services {
-  orm: MikroORM;
-  em: EntityManager;
-  webrequest: EntityRepository<WebRequest>;
-}
+// export interface Services {
+//   orm: MikroORM;
+//   em: EntityManager;
+//   webrequest: EntityRepository<WebRequest>;
+// }
 
-let cache: Services;
+// let cache: Services;
+let cachedOrm: MikroORM;
 
-export async function initORM(options?: Options): Promise<Services> {
-  if (cache) {
-    return cache;
+export async function initORM(/* options?: Options */): Promise<MikroORM> {
+  if (cachedOrm) {
+    return cachedOrm;
   }
 
-  const orm = await MikroORM.init(options);
+  const orm = await MikroORM.init(config);
 
   // save to cache before returning
-  return (cache = {
-    orm,
-    em: orm.em,
-    webrequest: orm.em.getRepository(WebRequest),
-  });
+  return (cachedOrm = orm);
 }
