@@ -46,9 +46,8 @@ export class Gateway {
     try {
       this.orm = await initORM();
 
-      if (process.env.NODE_ENV === 'dev') {
-        if (await this.orm.migrator.checkMigrationNeeded())
-          await this.orm.migrator.up();
+      if (await this.orm.migrator.checkMigrationNeeded()) {
+        await this.orm.migrator.up();
       }
 
       await this.fastifyServer.listen({ port: 4000, host: '0.0.0.0' });
