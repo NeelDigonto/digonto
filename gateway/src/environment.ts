@@ -36,9 +36,6 @@ export function getEnv(): Env {
       dotenv.config({ path: './.env.mig' });
     }
 
-    if (process.env.NODE_ENV === 'test') {
-      dotenv.config({ path: './.env.test' });
-    }
     const parseResult = RawEnvSchema.safeParse(process.env);
 
     if (!parseResult.success) {

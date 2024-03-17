@@ -1,17 +1,14 @@
-import * as dotenv from 'dotenv';
-dotenv.config({ path: './.env.test' });
-
 import { MikroORM } from '@mikro-orm/postgresql';
-import config from '@/mikro-orm.config';
 import { createWebRequest } from '@/modules/WebRequest/WebRequest';
 import { WebRequest } from '@/db/entities/WebRequest.entity';
+import { initORM } from '@/db/db';
 
 let orm: MikroORM;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let createdWebRequestId: number;
 
 beforeAll(async () => {
-  orm = await MikroORM.init(config);
+  orm = await initORM();
   await orm.schema.dropSchema();
   await orm.schema.createSchema();
 });

@@ -25,22 +25,6 @@ jobs:
           no-cache: true
 
   gateway_test:
-    services:
-      postgres:
-        image: postgres:16.2
-        env:
-          POSTGRES_DB: postgres
-          POSTGRES_PASSWORD: 123
-          POSTGRES_USER: postgres
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          # Maps tcp port 5432 on service container to the host
-          - 5432:5432
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -52,12 +36,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      #- name: Test Gateway
+      #  uses: docker/build-push-action@v5
+      #  with:
+      #    context: ./gateway
+      #    file: ./gateway/Dockerfile
+      #    push: false
+      #    tags: digonto.in/gateway-test:latest
+      #    target: test
+      #    no-cache: true
+
       - name: Test Gateway
-        uses: docker/build-push-action@v5
-        with:
-          context: ./gateway
-          file: ./gateway/Dockerfile
-          push: false
-          tags: digonto.in/gateway-test:latest
-          target: test
-          no-cache: true
+        run: docker compose -f ./gateway/compose.ci.yaml up --exit-code-from gateway

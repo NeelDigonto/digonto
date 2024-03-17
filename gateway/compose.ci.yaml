@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   postgres:
     image: postgres:16.1
@@ -10,43 +10,26 @@ services:
       - 5432:5432
   gateway:
     build:
-      context: gateway
-      target: dev
+      context: .
+      target: test
     ports:
       - 4000:4000
-    expose:
-      - 4000
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
-      POSTGRES_DB: dev
+      POSTGRES_DB: test
       PORT: 4000
-      NODE_ENV: dev
+      NODE_ENV: ci
     volumes:
-      - ./gateway:/app/
+      - .:/app/
       - gateway-nodemodules:/app/node_modules
       - gateway-dist:/app/dist
     depends_on:
       - postgres
-  web:
-    build:
-      context: web
-      target: dev
-    ports:
-      - 3000:3000
-    environment:
-      PORT: 3000
-      NODE_ENV: dev
-    volumes:
-      - ./web:/app/
-      - web-nodemodules:/app/node_modules
-    depends_on:
-      - gateway
 
 volumes:
   gateway-nodemodules: {}
   gateway-dist: {}
-  web-nodemodules: {}
   pgdata: {}
