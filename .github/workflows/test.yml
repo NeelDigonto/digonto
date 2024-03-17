@@ -36,15 +36,5 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      #- name: Test Gateway
-      #  uses: docker/build-push-action@v5
-      #  with:
-      #    context: ./gateway
-      #    file: ./gateway/Dockerfile
-      #    push: false
-      #    tags: digonto.in/gateway-test:latest
-      #    target: test
-      #    no-cache: true
-
       - name: Test Gateway
         run: docker compose -f ./gateway/compose.ci.yaml up --exit-code-from gateway
