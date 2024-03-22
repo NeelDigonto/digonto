@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      name: gateway-pod
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: gateway
+          image: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto-web
+          resources:
+            requests:
+              memory: 200Mi
+              cpu: 100m
+          env:
+            - name: POSTGRES_HOST
+              value: ""
+            - name: POSTGRES_PORT
+              value: 5432
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              value: ""
+            - name: PORT
+              value: ""
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-cip
+  namespace: digonto
+spec:
+  type: ClusterIP
+  selector:
+    app: gateway
+  ports:
+    - targetPort: 4000
+      port: 4000

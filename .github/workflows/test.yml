@@ -37,4 +37,4 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Test Gateway
-        run: docker compose -f ./gateway/compose.ci.yaml up --exit-code-from gateway
+        run: docker compose -f ./gateway/compose.ci.yaml up --build --exit-code-from gateway
