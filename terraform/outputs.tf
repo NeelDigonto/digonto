@@ -1,3 +1,5 @@
+data "aws_availability_zones" "available" {}
+
 locals {
   region       = "ap-south-1"
   cluster_name = "digonto"
