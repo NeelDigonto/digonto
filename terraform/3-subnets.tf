@@ -7,7 +7,7 @@ resource "aws_subnet" "public1-ap-south-1a" {
   map_public_ip_on_launch = true
 
   tags = {
-    "Name"                   = "digonto-subnet-public1-ap-south-1a"
+    "Name" = "digonto-subnet-public1-ap-south-1a"
     # "kubernetes.io/role/elb" = "1"
     # "kubernetes.io/cluster/digonto-cluster" = "owned"
     # "karpenter.sh/discovery" = local.cluster_name
@@ -20,7 +20,7 @@ resource "aws_subnet" "private1-ap-south-1a" {
   availability_zone = "ap-south-1a"
 
   tags = {
-    "Name"                            = "digonto-subnet-private1-ap-south-1a"
+    "Name" = "digonto-subnet-private1-ap-south-1a"
     # "kubernetes.io/role/internal-elb" = "1"
     # "kubernetes.io/cluster/digonto-cluster" = "owned"
     # "karpenter.sh/discovery" = local.cluster_name
@@ -37,7 +37,7 @@ resource "aws_subnet" "public2-ap-south-1b" {
   map_public_ip_on_launch = true
 
   tags = {
-    "Name"                   = "digonto-subnet-public1-ap-south-1b"
+    "Name" = "digonto-subnet-public1-ap-south-1b"
     # "kubernetes.io/role/elb" = "1"
     # "kubernetes.io/cluster/digonto-cluster" = "owned"
     # "karpenter.sh/discovery" = local.cluster_name
@@ -50,7 +50,7 @@ resource "aws_subnet" "private2-ap-south-1b" {
   availability_zone = "ap-south-1b"
 
   tags = {
-    "Name"                            = "digonto-subnet-private1-ap-south-1b"
+    "Name" = "digonto-subnet-private1-ap-south-1b"
     # "kubernetes.io/role/internal-elb" = "1"
     # "kubernetes.io/cluster/digonto-cluster" = "owned"
     # "karpenter.sh/discovery" = local.cluster_name
@@ -67,7 +67,7 @@ resource "aws_subnet" "public3-ap-south-1c" {
   map_public_ip_on_launch = true
 
   tags = {
-    "Name"                   = "digonto-subnet-public1-ap-south-1c"
+    "Name" = "digonto-subnet-public1-ap-south-1c"
     # "kubernetes.io/role/elb" = "1"
     # "kubernetes.io/cluster/digonto-cluster" = "owned"
     # "karpenter.sh/discovery" = local.cluster_name
@@ -80,7 +80,7 @@ resource "aws_subnet" "private3-ap-south-1c" {
   availability_zone = "ap-south-1c"
 
   tags = {
-    "Name"                            = "digonto-subnet-private1-ap-south-1c"
+    "Name" = "digonto-subnet-private1-ap-south-1c"
     # "kubernetes.io/role/internal-elb" = "1"
     # "kubernetes.io/cluster/digonto-cluster" = "owned"
     # "karpenter.sh/discovery" = local.cluster_name
