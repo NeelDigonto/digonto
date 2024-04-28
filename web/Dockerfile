@@ -1,7 +1,9 @@
 ARG NODE_VERSION=20.11.0
+ARG NPM_TOKEN
 
 FROM node:${NODE_VERSION}-bookworm as base
 WORKDIR /app
+
 
 FROM base as dev
 RUN --mount=type=bind,source=package.json,target=package.json \
@@ -12,16 +14,44 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 COPY . .
 CMD ["npm", "run", "dev"]
 
-
-FROM base as test
-ENV NODE_ENV test
+FROM base as lintcheck
+ENV NODE_ENV ci
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --include=dev
-USER node
+#USER node
 COPY . .
-RUN npm run test
+RUN ["npm", "run", "lint:check"]
+
+FROM base as formatcheck
+ENV NODE_ENV ci
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm ci --include=dev
+#USER node
+COPY . .
+RUN ["npm", "run", "format:check"]
+
+FROM base as devtest
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm ci --include=dev
+#USER node
+COPY . .
+CMD ["npm", "run", "dev:test"]
+
+FROM base as citest
+ENV NODE_ENV ci
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    echo $NPM_TOKEN && npm ci --include=dev
+#USER node
+COPY . .
+CMD ["npm", "run", "test"]
 
 
 FROM base as proddeps
@@ -45,4 +75,3 @@ COPY --from=prodbuild /app/package-lock.json ./package-lock.json
 COPY --from=prodbuild /app/next.config.mjs ./next.config.mjs
 COPY --from=prodbuild /app/.next ./.next
 CMD ["npm", "run", "start"]
-

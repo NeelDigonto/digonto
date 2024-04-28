@@ -18,7 +18,7 @@ afterAll(async () => {
   await orm.close();
 });
 
-describe('UserRole Test Suite', () => {
+describe('WebRequest Test Suite', () => {
   // eslint-disable-next-line jest/expect-expect
   it('Create', async () => {
     const em = orm.em.fork();

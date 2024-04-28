@@ -1,0 +1,17 @@
+services:
+  gateway:
+    build:
+      target: devtest
+    environment:
+      NODE_ENV: test
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+  web:
+    build:
+      target: dev
+    environment:
+      NODE_ENV: test
+    
