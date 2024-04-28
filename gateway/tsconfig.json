@@ -22,6 +22,11 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*", "__tests__/**/*", "migrations/**/*", "jest.config.ts"],
+  "include": [
+    "src/**/*",
+    "__tests__/**/*",
+    "migrations/**/*",
+    "jest.config.ts"
+  ],
   "exclude": ["node_modules"]
 }
