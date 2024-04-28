@@ -22,17 +22,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     npm ci --include=dev
 #USER node
 COPY . .
-RUN ["npm", "run", "lint:check"]
-
-FROM base as formatcheck
-ENV NODE_ENV ci
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci --include=dev
-#USER node
-COPY . .
-RUN ["npm", "run", "format:check"]
+RUN ["npm", "run", "lint"]
 
 FROM base as devtest
 RUN --mount=type=bind,source=package.json,target=package.json \
