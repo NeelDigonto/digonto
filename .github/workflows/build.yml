@@ -4,7 +4,7 @@ on: [push]
 
 env:
   WEB_REPO_NAME: digonto/web
-  GATEWAY_REPO_NAME: digonto/web
+  GATEWAY_REPO_NAME: digonto/gateway
   ECR_URL: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/
 
 
@@ -45,9 +45,95 @@ jobs:
 
       - name: Test Gateway
         run: ./citest.sh
+        
+  gateway_lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  build-upload:
-    needs: [web_test, gateway_test]
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Gateway Lint Check
+        uses: docker/build-push-action@v5
+        with:
+          context: ./gateway
+          file: ./gateway/Dockerfile
+          push: false
+          tags: digonto.in/gateway-lint:latest
+          target: lintcheck
+          no-cache: true
+
+  gateway_format:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Format Check Gateway
+        uses: docker/build-push-action@v5
+        with:
+          context: ./gateway
+          file: ./gateway/Dockerfile
+          push: false
+          tags: digonto.in/gateway-format:latest
+          target: formatcheck
+          no-cache: true
+
+  build-gateway:
+    needs: [gateway_test, gateway_lint, gateway_format]
+    permissions:
+      id-token: write
+      contents: write
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ap-south-1
+          role-to-assume: arn:aws:iam::953253449063:role/digonto-github-role
+          role-session-name: GitHubActionsDigonto
+
+      - name: Log AWS STS Info
+        run: aws sts get-caller-identity
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./gateway
+          file: ./gateway/Dockerfile
+          push: true
+          tags: |
+            ${{ env.ECR_URL }}${{ env.GATEWAY_REPO_NAME }}:${{ github.sha }}
+          platforms: linux/amd64
+          target: prod
+          no-cache: true
+
+  build-web:
+    needs: [web_test]
     permissions:
       id-token: write
       contents: write
@@ -88,14 +174,3 @@ jobs:
           target: prod
           no-cache: true
 
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: ./gateway
-          file: ./gateway/Dockerfile
-          push: true
-          tags: |
-            ${{ env.ECR_URL }}${{ env.GATEWAY_REPO_NAME }}:${{ github.sha }}
-          platforms: linux/amd64
-          target: prod
-          no-cache: true
