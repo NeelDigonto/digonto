@@ -7,8 +7,8 @@ on:
     types:
       - completed
 env:
-  WEB_REPO_URL: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto/web
-  GATEWAY_REPO_URL: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto/gateway
+  WEB_REPO_NAME: digonto/web
+  GATEWAY_REPO_NAME: digonto/web
 
 jobs:
   production-deploy:
@@ -29,25 +29,25 @@ jobs:
         run: aws sts get-caller-identity
 
       - name: Remove 'latest' tag from gateway
-        run: aws ecr batch-delete-image --repository-name ${{ env.GATEWAY_REPO_URL }} --image-ids imageTag=latest --region ap-south-1
+        run: aws ecr batch-delete-image --repository-name ${{ env.GATEWAY_REPO_NAME }} --image-ids imageTag=latest --region ap-south-1
 
       - name: Remove 'latest' tag from web
-        run: aws ecr batch-delete-image --repository-name ${{ env.WEB_REPO_URL }} --image-ids imageTag=latest --region ap-south-1
+        run: aws ecr batch-delete-image --repository-name ${{ env.WEB_REPO_NAME }} --image-ids imageTag=latest --region ap-south-1
 
       - name: Retag Image gateway
         run: |
-          MANIFEST=$(aws ecr batch-get-image --repository-name ${{ env.GATEWAY_REPO_URL }} --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output json | jq --raw-output '.images[].imageManifest')
-          aws ecr put-image --repository-name ${{ env.GATEWAY_REPO_URL }} --image-tag latest --image-manifest "$MANIFEST"
+          MANIFEST=$(aws ecr batch-get-image --repository-name ${{ env.GATEWAY_REPO_NAME }} --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output json | jq --raw-output '.images[].imageManifest')
+          aws ecr put-image --repository-name ${{ env.GATEWAY_REPO_NAME }} --image-tag latest --image-manifest "$MANIFEST"
           echo $MANIFEST
 
       - name: Retag Image web
         run: |
-          MANIFEST=$(aws ecr batch-get-image --repository-name ${{ env.WEB_REPO_URL }} --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output json | jq --raw-output '.images[].imageManifest')
-          aws ecr put-image --repository-name ${{ env.WEB_REPO_URL }} --image-tag latest --image-manifest "$MANIFEST"
+          MANIFEST=$(aws ecr batch-get-image --repository-name ${{ env.WEB_REPO_NAME }} --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output json | jq --raw-output '.images[].imageManifest')
+          aws ecr put-image --repository-name ${{ env.WEB_REPO_NAME }} --image-tag latest --image-manifest "$MANIFEST"
           echo $MANIFEST
 
       - name: Describe Image gateway
-        run: aws ecr describe-images --repository-name ${{ env.GATEWAY_REPO_URL }}
+        run: aws ecr describe-images --repository-name ${{ env.GATEWAY_REPO_NAME }}
 
       - name: Describe Image web
-        run: aws ecr describe-images --repository-name ${{ env.WEB_REPO_URL }}
+        run: aws ecr describe-images --repository-name ${{ env.WEB_REPO_NAME }}
