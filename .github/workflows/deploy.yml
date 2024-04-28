@@ -51,3 +51,4 @@ jobs:
 
       - name: Describe Image web
         run: aws ecr describe-images --repository-name ${{ env.WEB_REPO_NAME }}
+# rev 2
