@@ -3,8 +3,9 @@ run-name: Build Workflow running for ${{ github.event_name }} on ${{ github.ref 
 on: [push]
 
 env:
-  WEB_REPO_URL: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto/web
-  GATEWAY_REPO_URL: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto/gateway
+  WEB_REPO_NAME: digonto/web
+  GATEWAY_REPO_NAME: digonto/web
+  ECR_URL: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/
 
 
 jobs:
@@ -82,7 +83,7 @@ jobs:
           file: ./web/Dockerfile
           push: true
           tags: |
-            ${{ env.WEB_REPO_URL }}:${{ github.sha }}
+            ${{ env.ECR_URL }}${{ env.WEB_REPO_NAME }}:${{ github.sha }}
           platforms: linux/amd64
           target: prod
           no-cache: true
@@ -94,7 +95,7 @@ jobs:
           file: ./gateway/Dockerfile
           push: true
           tags: |
-            ${{ env.GATEWAY_REPO_URL }}:${{ github.sha }}
+            ${{ env.ECR_URL }}${{ env.GATEWAY_REPO_NAME }}:${{ github.sha }}
           platforms: linux/amd64
           target: prod
           no-cache: true
