@@ -28,7 +28,7 @@ jobs:
           file: ./web/Dockerfile
           push: false
           tags: digonto.in/web-test:latest
-          target: test
+          target: citest
           no-cache: true
 
   gateway_test:
