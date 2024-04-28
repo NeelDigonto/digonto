@@ -18,26 +18,6 @@ services:
       - gateway-nodemodules:/app/node_modules
     depends_on:
       - postgres
-  web:
-    build:
-      context: web
-    ports:
-      - 3000:3000
-    environment:
-      PORT: 3000
-    volumes:
-      - ./web:/app/
-      - web-nodemodules:/app/node_modules
-    depends_on:
-      - gateway
-  nginx:
-    build:
-      context: nginx
-    ports:
-      - 8080:80
-    depends_on:
-      - web
-      - gateway
 
 volumes:
   gateway-nodemodules: {}
