@@ -27,19 +27,22 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - protocol: TCP
+    - name: tcp-http
+      protocol: TCP
       port: 80 # service port
       targetPort: 80 # container port
       nodePort: 30001 # external port
-    - protocol: TCP
+    - name: tcp-https
+      protocol: TCP
       port: 443
-      targetPort: 30002
-      nodePort: 30001
-    - protocol: UDP
+      nodePort: 30002
+    - name: udp-http
+      protocol: UDP
       port: 80
-      targetPort: 30001
-    - protocol: UDP
+      nodePort: 30001
+    - name: udp-https
+      protocol: UDP
       port: 443
-      targetPort: 30002
+      nodePort: 30002
   selector:
     app: nginx

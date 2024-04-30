@@ -20,7 +20,7 @@ spec:
             - containerPort: 5432
           envFrom:
             - configMapRef:
-                name: postgres-secret
+                name: postgres-configmap
             - secretRef:
                 name: pg-secret
           volumeMounts:
@@ -81,7 +81,7 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: postgres-secret
+  name: postgres-configmap
   labels:
     app: postgres
 data:

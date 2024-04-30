@@ -13,8 +13,8 @@
     "lint:fix": "eslint --fix . --ext .ts --ext .mts",
     "coverage": "jest -i --coverage",
     "test": "NODE_ENV=test jest -i --verbose true --detectOpenHandles",
-    "build": "tsc --build",
-    "start": "NODE_ENV=production node dist/src/main.js",
+    "build": "tsc --build && tsc-alias",
+    "start": "NODE_ENV=production node -r tsconfig-paths/register dist/src/main.js",
     "dev:compile": "tsc -w",
     "dev:test": "NODE_ENV=test jest -i --watchAll --verbose true --detectOpenHandles",
     "dev:run": "NODE_ENV=dev nodemon --watch \"dist/**/*\" -e js  ./dist/src/main.js",
@@ -41,6 +41,7 @@
     "postgres": "^3.4.3",
     "retry": "^0.13.1",
     "tsconfig-paths": "^4.2.0",
+    "tscpaths": "^0.0.9",
     "winston": "^3.11.0",
     "ws": "^8.16.0",
     "zod": "^3.22.4"

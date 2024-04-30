@@ -1,9 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: server-depl
+  name: gateway-depl
 spec:
   replicas: 1
+  strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 25%
   selector:
     matchLabels:
       app: gateway
@@ -15,28 +20,31 @@ spec:
     spec:
       containers:
         - name: gateway
-          image: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto-web
+          image: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto/gateway:latest
           resources:
             requests:
               memory: 200Mi
               cpu: 100m
           env:
             - name: POSTGRES_HOST
-              value: ""
+              value: "postgres"
             - name: POSTGRES_PORT
-              value: 5432
+              value: "5432"
+            - name: PORT
+              value: "4000"
             - name: POSTGRES_USER
               value: "postgres"
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: secrets
+                  name: pg-secret
                   key: POSTGRES_PASSWORD
             - name: POSTGRES_DB
               value: ""
             - name: PORT
               value: ""
-
+      imagePullSecrets:
+        - name: regcred
 ---
 apiVersion: v1
 kind: Service
