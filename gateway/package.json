@@ -18,7 +18,7 @@
     "dev:compile": "tsc -w",
     "dev:test": "NODE_ENV=test jest -i --watchAll --verbose true --detectOpenHandles",
     "dev:run": "NODE_ENV=dev nodemon --watch \"dist/**/*\" -e js  ./dist/src/main.js",
-    "dev": "concurrently --raw 'npm run dev:compile' 'npm run dev:run'",
+    "dev": "concurrently --raw 'npm run dev:compile' 'tsc-alias -w' 'npm run dev:run'",
     "migrate-post": "NODE_ENV=migration node ./dist/src/db/migrate.js",
     "migrate": "npm run build && npm run migrate-post"
   },

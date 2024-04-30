@@ -9,14 +9,13 @@ services:
     ports:
       - 5432:5432
   gateway:
-    image: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/digonto/gateway:latest
-    # build:
-    #   context: gateway
+    build:
+      context: gateway
     environment:
       PORT: 4000
-    # volumes:
-    #   - ./gateway/:/app/
-    #   - gateway-nodemodules:/app/node_modules
+    volumes:
+      - ./gateway/:/app/
+      - gateway-nodemodules:/app/node_modules
     depends_on:
       - postgres
 
