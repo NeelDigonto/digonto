@@ -5,7 +5,8 @@ on: [push]
 env:
   WEB_REPO_NAME: digonto/web
   GATEWAY_REPO_NAME: digonto/gateway
-  ECR_URL: 953253449063.dkr.ecr.ap-south-1.amazonaws.com/
+  ECR_REGION: us-west-2
+  ECR_URL: 953253449063.dkr.ecr.us-west-2.amazonaws.com/
 
 jobs:
   web_test:
@@ -124,7 +125,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ap-south-1
+          aws-region: ${{ env.ECR_REGION}}
           role-to-assume: arn:aws:iam::953253449063:role/digonto-github-role
           role-session-name: GitHubActionsDigonto
 
@@ -166,7 +167,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ap-south-1
+          aws-region: ${{ env.ECR_REGION}}
           role-to-assume: arn:aws:iam::953253449063:role/digonto-github-role
           role-session-name: GitHubActionsDigonto
 
@@ -205,7 +206,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ap-south-1
+          aws-region: ${{ env.ECR_REGION}}
           role-to-assume: arn:aws:iam::953253449063:role/digonto-github-role
           role-session-name: GitHubActionsDigonto
 
@@ -213,11 +214,11 @@ jobs:
         run: aws sts get-caller-identity
 
       - name: Remove 'latest' tag from web
-        run: aws ecr batch-delete-image --repository-name ${{ env.WEB_REPO_NAME }} --image-ids imageTag=latest --region ap-south-1
+        run: aws ecr batch-delete-image --repository-name ${{ env.WEB_REPO_NAME }} --image-ids imageTag=latest --region ${{ env.ECR_REGION}}
 
       - name: Retag Image web
         run: |
-          MANIFEST=$(aws ecr batch-get-image --repository-name ${{ env.WEB_REPO_NAME }} --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output json | jq --raw-output '.images[].imageManifest')
+          MANIFEST=$(aws ecr batch-get-image --repository-name ${{ env.WEB_REPO_NAME }} --image-ids imageTag=${{ github.sha }} --region ${{ env.ECR_REGION}} --output json | jq --raw-output '.images[].imageManifest')
           aws ecr put-image --repository-name ${{ env.WEB_REPO_NAME }} --image-tag latest --image-manifest "$MANIFEST"
           echo $MANIFEST
 
@@ -234,7 +235,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ap-south-1
+          aws-region: ${{ env.ECR_REGION}}
           role-to-assume: arn:aws:iam::953253449063:role/digonto-github-role
           role-session-name: GitHubActionsDigonto
 
@@ -242,11 +243,11 @@ jobs:
         run: aws sts get-caller-identity
 
       - name: Remove 'latest' tag from gateway
-        run: aws ecr batch-delete-image --repository-name ${{ env.GATEWAY_REPO_NAME }} --image-ids imageTag=latest --region ap-south-1
+        run: aws ecr batch-delete-image --repository-name ${{ env.GATEWAY_REPO_NAME }} --image-ids imageTag=latest --region ${{ env.ECR_REGION}}
 
       - name: Retag Image gateway
         run: |
-          MANIFEST=$(aws ecr batch-get-image --repository-name ${{ env.GATEWAY_REPO_NAME }} --image-ids imageTag=${{ github.sha }} --region ap-south-1 --output json | jq --raw-output '.images[].imageManifest')
+          MANIFEST=$(aws ecr batch-get-image --repository-name ${{ env.GATEWAY_REPO_NAME }} --image-ids imageTag=${{ github.sha }} --region ${{ env.ECR_REGION}} --output json | jq --raw-output '.images[].imageManifest')
           aws ecr put-image --repository-name ${{ env.GATEWAY_REPO_NAME }} --image-tag latest --image-manifest "$MANIFEST"
           echo $MANIFEST
 
