@@ -49,7 +49,7 @@ ENV NODE_ENV production
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
+    npm ci --include=dev
 
 FROM base as prodbuild
 COPY --from=proddeps /app/node_modules ./node_modules
@@ -62,6 +62,6 @@ USER node
 COPY --from=prodbuild /app/node_modules ./node_modules
 COPY --from=prodbuild /app/package.json ./package.json
 COPY --from=prodbuild /app/package-lock.json ./package-lock.json
-COPY --from=prodbuild /app/next.config.mjs ./next.config.mjs
+COPY --from=prodbuild /app/next.config.ts ./next.config.ts
 COPY --from=prodbuild /app/.next ./.next
 CMD ["npm", "run", "start"]
