@@ -1,0 +1,58 @@
+.heroImageContainer {
+  height: calc(100vh - var(--header-height));
+  /* height: 100vh;
+  top: 0; */
+  width: 100%;
+  z-index: -2;
+  position: absolute;
+
+  /*  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center; */
+}
+
+.heroImage {
+  object-fit: cover;
+  object-position: center;
+  height: 100%;
+  width: 100%;
+}
+
+.heroImageEffect {
+  height: calc(100vh - var(--header-height));
+  /* height: 100vh;
+  top: 0; */
+  width: 100%;
+  z-index: -1;
+  position: absolute;
+
+  backdrop-filter: saturate(120%) blur(32px) brightness(75%);
+}
+
+.heroTextContainer {
+  height: calc(100vh - var(--header-height));
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.heroText {
+  /* width: 100%; */
+
+  /* display: block; */
+  /* margin-left: 20%;
+  margin-right: 20%;
+
+  @media (max-width: 961px) {
+    margin-left: 16px;
+    margin-right: 16px;
+  } */
+}

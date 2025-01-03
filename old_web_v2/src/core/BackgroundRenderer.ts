@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from "../../node_modules/@types/three";
 //import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { Engine } from "./Engine";
 import vertexShader from "@/shader/noise/vertex.glsl";

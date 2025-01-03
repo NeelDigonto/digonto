@@ -1,0 +1,138 @@
+.headerRoot {
+  position: sticky;
+  top: 0;
+  height: var(--header-height);
+  width: 100%;
+  z-index: 800;
+
+  /* background: rgba(255, 255, 255, 0.7); */
+  /* backdrop-filter: saturate(180%) blur(20px) brightness(125%) ; */
+  backdrop-filter: saturate(180%) blur(32px) brightness(75%);
+  box-shadow: rgb(0 0 0 / 2%) 0px 1px 0px 0px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  /* border-bottom: 1px solid #302316; */
+
+  padding-left: 16px;
+  padding-right: 16px;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  /*   align-self: center; */
+
+  @media (max-width: 961px) {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  /*   align-self: center; */
+
+  position: relative;
+  width: min(110ch, calc(100% - 64px));
+  height: 100%;
+
+  @media (max-width: 961px) {
+    width: 100%;
+  }
+}
+
+.headerBrandContainer {
+  position: relative;
+  height: 100%;
+  width: max-content;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+
+.headerIconContainer {
+  height: 100%;
+  width: max-content;
+
+  padding-left: 16px;
+  padding-right: 16px;
+
+  marginleft: 16px;
+  marginright: 16px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+
+.headerLinkContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  align-content: center;
+
+  height: 100%;
+  width: max-content;
+
+  padding-left: 16px;
+  padding-right: 16px;
+  gap: 2rem;
+
+  @media (max-width: 961px) {
+    display: none;
+  }
+}
+
+.headerExpandButtonContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+
+  height: 100%;
+  width: max-content;
+
+  padding-left: 16px;
+  padding-right: 16px;
+
+  @media (min-width: 961px) {
+    display: none;
+  }
+}
+
+.headerNavCurtain {
+  z-index: 750;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 100vh;
+  width: 100vw;
+
+  backdrop-filter: saturate(180%) blur(20px);
+}
+
+.headerSpacer {
+  height: var(--header-height);
+  width: 100%;
+}

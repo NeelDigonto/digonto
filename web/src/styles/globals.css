@@ -1,11 +1,45 @@
-:root {
-  /* --max-width: 1100px; */
-  /* --border-radius: 12px; */
-  /* --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-    "Fira Mono", "Droid Sans Mono", "Courier New", monospace; */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+:root {
   font-family: var(--font-inter), sans-serif;
+  --header-height: 3.5rem;
+
+  --background-color: #ffffff;
+  --foreground-color: #171717;
+
+  --bp-xxs: 320px; /* smartphones, iPhone, portrait 480x320 phones */
+  --bp-xs: 480px; /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+  --bp-sm: 640px; /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+  --bp-md: 768px; /* tablet, landscape iPad, lo-res laptops ands desktops */
+  --bp-lg: 1024px; /* big landscape tablets, laptops, and desktops */
+  --bp-xl: 1280px; /* hi-res laptops and desktops */
+  --bp-xxl: 1536px; /* big hi-res laptops and desktops */
+}
+
+@media (prefers-color-scheme: dark) or (prefers-color-scheme: light) {
+  html {
+    color-scheme: dark;
+  }
+
+  :root {
+    --background-color: #0a0a0a;
+    --foreground-color: #ededed;
+  }
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-size: 1.1rem;
+  letter-spacing: 0.3px;
+
+  color: var(--foreground-color);
+  background: var(--background-color);
 }
 
 /* scrollbar */
@@ -31,43 +65,6 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-@media (prefers-color-scheme: dark) or (prefers-color-scheme: light) {
-  html {
-    color-scheme: dark;
-  }
-
-  :root {
-    --background-color: oklch(18.5%, 3.75%, 250);
-
-    --text-primary-color: oklch(100% 10% 240 / 1);
-    --text-secondary-color: oklch(90% 5% 240 / 1);
-    --text-tertiary-color: oklch(90% 5% 240 / 1);
-  }
-}
-
-body {
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  font-size: 1.1rem;
-  letter-spacing: 0.3px;
-  color: var(--text-secondary-color);
-
-  background-color: var(--background-color);
-  width: 100%;
-  height: 100%;
-  min-height: 100vh;
-}
-
-main {
-  /* padding-right: calc(100vw - 100%); */
-  width: 100%;
-  height: 100%;
-}
-
-.homeMain {
-  background-color: transparent;
-}
-
 .bg-canvas {
   position: fixed;
   z-index: -1;
@@ -75,46 +72,7 @@ main {
   bottom: 0;
   left: 0;
   right: 0;
-}
-
-h1 {
-  font-size: 2rem;
-  font-weight: 600;
-  letter-spacing: 0.1rem;
-
-  color: var(--text-primary-color);
-}
-
-h2 {
-  font-size: 1.75rem;
-  font-weight: 500;
-  letter-spacing: 0.075rem;
-}
-
-h3 {
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.05rem;
-  opacity: 80%;
-}
-
-h4 {
-  font-size: 0.9rem;
-  font-weight: 400;
-  letter-spacing: 0.025rem;
-  opacity: 80%;
-}
-
-h5 {
-  font-size: 0.9rem;
-  font-weight: 400;
-  letter-spacing: 0.025rem;
-  opacity: 80%;
-}
-
-h6 {
-  font-size: 0.9rem;
-  font-weight: 400;
-  letter-spacing: 0.025rem;
-  opacity: 80%;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }

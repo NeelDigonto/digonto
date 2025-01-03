@@ -1,36 +1,30 @@
 import React from "react";
-import Badge from "./Badge";
+import styles from "@/styles/Hero.module.css";
+import Image from "next/image";
+import heroImage from "@public/quino-al-mBQIfKlvowM-unsplash.jpg";
 
-const Hero = () => {
+export default function Hero() {
   return (
-    <div className="heroContainer">
-      <div className="aboutContainer">
-        <div className="heroTitleText">I warmly welcome you to my site.</div>
-        <div className="aboutIntroContainer">
-          <div className="heroIntroText">
-            I am developer who loves to work on almost everything.
-          </div>
-          <div className="aboutTechStackContainer">
-            <Badge src="/ReactJS.svg" text="ReactJS" />
-            <Badge src="/NextJS.svg" text="NextJS" />
-            <Badge src="/NodeJS.svg" text="NodeJS" />
-            <Badge src="/C++.svg" text="C++" />
-            <Badge src="/Docker.svg" text="Docker" />
-            <Badge src="/Kubernetes.svg" text="Kubernetes" />
-            <Badge src="/WebAssembly.svg" text="WebAssembly" />
-            <Badge src="/PostgreSQL.svg" text="PostgreSQL" />
-            <Badge src="/OpenGL.svg" text="OpenGL" />
-            <Badge src="/ThreeJS.svg" text="ThreeJS" />
-          </div>
-          <div className="aboutExperienceContainer">
-            <div>
-              You will soon find blogs and many cool experiments on this site.
-            </div>
-          </div>
+    <React.Fragment>
+      <div className={`full-bleed ${styles.heroImageContainer}`}>
+        <Image
+          src={heroImage}
+          width={300}
+          height={200}
+          quality={20}
+          alt="Digonto"
+          className={styles.heroImage}
+        />
+      </div>
+      <div className={styles.heroImageEffect} />
+      <div className={styles.heroTextContainer}>
+        <div
+          className={`text-4xl font-normal tracking-wide ${styles.heroText}`}
+        >
+          Hello! I&apos;m Saikat, a Full-Stack Software Developer working with
+          distributed micro-services, React, AWS and ML.
         </div>
       </div>
-    </div>
+    </React.Fragment>
   );
-};
-
-export default Hero;
+}
