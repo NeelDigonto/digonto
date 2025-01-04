@@ -8,7 +8,9 @@ services:
     volumes:
       - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
       # - ./nginx/certs/digonto.in/:/etc/letsencrypt/live/digonto.in/:ro
-      - /etc/letsencrypt/archive/digonto.in/:/etc/letsencrypt/live/digonto.in/:ro
+      - /etc/letsencrypt/live/digonto.in/:/etc/letsencrypt/live/digonto.in/:ro
+      # required because of the symlink from live to archive files
+      - /etc/letsencrypt/archive/digonto.in/:/etc/letsencrypt/archive/digonto.in/:ro
     depends_on:
       - web
   web:
