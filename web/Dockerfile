@@ -70,6 +70,8 @@ COPY --from=prodbuild --chown=nextjs:nodejs /app/package-lock.json ./package-loc
 COPY --from=prodbuild --chown=nextjs:nodejs /app/next.config.ts ./next.config.ts
 COPY --from=prodbuild --chown=nextjs:nodejs /app/.next ./.next
 
+RUN chown -R nextjs:nodejs /app
+
 USER nextjs
 
 EXPOSE 3000
