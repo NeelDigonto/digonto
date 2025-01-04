@@ -58,10 +58,22 @@ RUN npm run build
 RUN npm prune --production
 
 FROM base AS prod
-USER node
+# USER node
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
 COPY --from=prodbuild /app/node_modules ./node_modules
 COPY --from=prodbuild /app/package.json ./package.json
 COPY --from=prodbuild /app/package-lock.json ./package-lock.json
 COPY --from=prodbuild /app/next.config.ts ./next.config.ts
-COPY --from=prodbuild /app/.next ./.next
+COPY --from=prodbuild --chown=nextjs:nodejs /app/.next ./.next
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT=3000
+
 CMD ["npm", "run", "start"]
