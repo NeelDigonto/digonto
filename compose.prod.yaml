@@ -1,0 +1,20 @@
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
+      - /etc/letsencrypt/live/digonto.in:/etc/letsencrypt/live/digonto.in:ro
+    depends_on:
+      - web
+  web:
+    image: 953253449063.dkr.ecr.us-west-2.amazonaws.com/digonto/web:latest
+    environment:
+      PORT: 3000
+    ports:
+      - 3000:3000
+
+
+# volumes:
