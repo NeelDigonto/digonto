@@ -6,7 +6,7 @@ services:
       - 443:443
     volumes:
       - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
-      - ./nginx/certs/digonto.in/:/etc/letsencrypt/live/digonto.in:ro
+      - ./nginx/certs/digonto.in/:/etc/letsencrypt/live/digonto.in/:ro
     depends_on:
       - web
   web:
