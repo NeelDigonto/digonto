@@ -51,7 +51,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      {/* <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> */}
       <body className={inter.variable}>
         <canvas className="bg-canvas" id="canvas" />
         <Header />

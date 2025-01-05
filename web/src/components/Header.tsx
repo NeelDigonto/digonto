@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import NextLink from "next/link";
 import styles from "@/styles/Header.module.css";
+import faviconSVG from "@public/favicon.svg";
 
 import { MdMenu } from "react-icons/md";
 
@@ -24,7 +25,7 @@ export default function Header() {
         <div className={styles.headerContainer}>
           <NextLink href="/" passHref className={styles.headerBrandContainer}>
             <div className={styles.headerIconContainer}>
-              <Image src="/favicon.svg" width={32} height={32} alt="Digonto" />
+              <Image src={faviconSVG} width={32} height={32} alt="Digonto" />
             </div>
             <div className="text-3xl italic font-semibold tracking-wide">
               Digonto

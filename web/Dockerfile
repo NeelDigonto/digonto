@@ -38,14 +38,14 @@ ENV NODE_ENV ci
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    echo $NPM_TOKEN && npm ci --include=dev
+    npm ci --include=dev
 #USER node
 COPY . .
 CMD ["npm", "run", "test"]
 
 
 FROM base AS proddeps
-ENV NODE_ENV production
+ENV NODE_ENV=production
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
@@ -68,7 +68,7 @@ COPY --from=prodbuild /app/node_modules ./node_modules
 COPY --from=prodbuild /app/package.json ./package.json
 COPY --from=prodbuild /app/package-lock.json ./package-lock.json
 COPY --from=prodbuild /app/next.config.ts ./next.config.ts
-COPY --from=prodbuild --chown=node:node /app/.next ./.next
+COPY --from=prodbuild /app/.next ./.next
 
 EXPOSE 3000
 
