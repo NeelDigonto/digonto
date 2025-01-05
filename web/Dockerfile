@@ -68,6 +68,7 @@ COPY --from=prodbuild /app/node_modules ./node_modules
 COPY --from=prodbuild /app/package.json ./package.json
 COPY --from=prodbuild /app/package-lock.json ./package-lock.json
 COPY --from=prodbuild /app/next.config.ts ./next.config.ts
+COPY --from=prodbuild /app/public ./public
 COPY --from=prodbuild /app/.next ./.next
 
 EXPOSE 3000
