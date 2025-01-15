@@ -1,26 +1,27 @@
-version: '3'
 services:
-  postgres:
-    image: postgres:16.2
-    environment:
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+  nginx:
+    image: nginx:latest
+    # privileged: true
     ports:
-      - 5432:5432
-  gateway:
-    build:
-      context: gateway
-    environment:
-      PORT: 4000
+      - 80:80
+      - 443:443
     volumes:
-      - ./gateway/:/app/
-      - gateway-nodemodules:/app/node_modules
+      - ./nginx/conf.d/:/etc/nginx/conf.d/:ro
+      # - ./nginx/certs/digonto.in/:/etc/letsencrypt/live/digonto.in/:ro
+      - /etc/letsencrypt/live/digonto.in/:/etc/letsencrypt/live/digonto.in/:ro
+      # required because of the symlink from live to archive files
+      - /etc/letsencrypt/archive/digonto.in/:/etc/letsencrypt/archive/digonto.in/:ro
     depends_on:
-      - postgres
+      - web
+  web:
+    image: 953253449063.dkr.ecr.us-west-2.amazonaws.com/digonto/web:latest
+    environment:
+      PORT: 3000
+    # volumes:
+    #   - web-next-meta:/app/.next/
+    ports:
+      - 3000:3000
+
 
 volumes:
-  gateway-nodemodules: {}
-  gateway-dist: {}
-  web-nodemodules: {}
-  pgdata: {}
+  web-next-meta: {}

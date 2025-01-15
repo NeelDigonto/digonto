@@ -1,2 +1,2 @@
-docker compose -f compose.yaml -f compose.dev.yaml --project-name digonto-devtest build --build-arg NPM_TOKEN=$NPM_TOKEN && \
-docker compose -f compose.yaml -f compose.dev.yaml --project-name digonto-devtest up
+docker compose -f compose.yaml -f compose.common.dev.yaml --project-name digonto-devtest build --build-arg NPM_TOKEN=$NPM_TOKEN && \
+docker compose -f compose.yaml -f compose.common.dev.yaml --project-name digonto-devtest up
