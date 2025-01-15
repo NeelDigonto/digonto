@@ -9,30 +9,48 @@ import cncfLogo from "@public/cncf-color-primary.svg";
 interface MyExperienceItemProps {
   organizationImageSRC: string | StaticImport;
   organizationImagAlt: string;
+  startingTime: string;
+  endingTime: string;
+  location: string;
+  locationType: "Remote" | "Hybrid" | "On-Site";
   details: React.ReactNode;
 }
 
 function MyExperienceItem({
   organizationImageSRC,
   organizationImagAlt,
+  startingTime,
+  endingTime,
+  location,
+  locationType,
   details,
 }: MyExperienceItemProps) {
   return (
     <div className={styles.myExperienceItem}>
       <div className={styles.myExperienceBrief}>
-        <Image
-          src={organizationImageSRC}
-          width={5 * 20}
-          height={2 * 20}
-          alt={organizationImagAlt}
-          style={{
-            backgroundColor: "#ddd",
-            borderRadius: "4px",
-            boxShadow: "0 0 10px 10px rgba(255, 255, 255, 0.1)",
-            width: "auto",
-            height: "auto",
-          }}
-        />
+        <div className={styles.myExperienceOrgImage}>
+          <Image
+            src={organizationImageSRC}
+            width={5 * 20}
+            height={2 * 20}
+            alt={organizationImagAlt}
+            style={{
+              backgroundColor: "#ddd",
+              borderRadius: "4px",
+              boxShadow: "0 0 10px 10px rgba(255, 255, 255, 0.1)",
+              width: "auto",
+              height: "auto",
+            }}
+          />
+        </div>
+        <div className={styles.myExperienceBriefInfo}>
+          <div>
+            {location} - {locationType}
+          </div>
+          <div>
+            {startingTime} - {endingTime}
+          </div>
+        </div>
       </div>
       <div
         className={`text-xl font-normal tracking-wide ${styles.myExperienceDetails}`}
@@ -52,6 +70,10 @@ export default function MyExperience() {
             {...{
               organizationImageSRC: dyteLogo,
               organizationImagAlt: "Dyte",
+              startingTime: "June 2024",
+              endingTime: "Present",
+              location: "Bangalore, India",
+              locationType: "Remote",
               details: (
                 <>
                   ◦ Billing: Implemented automated billing architecture with
@@ -66,6 +88,10 @@ export default function MyExperience() {
             {...{
               organizationImageSRC: dyteLogo,
               organizationImagAlt: "Dyte",
+              startingTime: "May 2024",
+              endingTime: "Jan 2024",
+              location: "Bangalore, India",
+              locationType: "Remote",
               details: (
                 <>
                   ◦ API: Architected 4 new crucial client-facing APIs and
@@ -81,6 +107,10 @@ export default function MyExperience() {
             {...{
               organizationImageSRC: cncfLogo,
               organizationImagAlt: "CNCF",
+              startingTime: "June 2023",
+              endingTime: "Aug 2023",
+              location: "USA",
+              locationType: "Remote",
               details: (
                 <>
                   ◦ Created the official WasmEdge zlib plugin in C++, bringing
