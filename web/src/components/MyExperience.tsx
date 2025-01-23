@@ -1,10 +1,79 @@
 import React from "react";
-import styles from "@/styles/MyExperience.module.css";
 import Image from "next/image";
 
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import dyteLogo from "@public/dyte.svg";
 import cncfLogo from "@public/cncf-color-primary.svg";
+import { styled } from "@pigment-css/react";
+
+const MyExperienceRoot = styled.div`
+  min-height: calc(100vh - var(--header-height));
+  width: 100%;
+  margin-top: var(--header-height);
+  padding-top: 2rem;
+`;
+
+const MyExperienceListContainer = styled.div`
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+`;
+
+const MyExperienceItemRoot = styled.div`
+  width: 100%;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+`;
+
+const MyExperienceBrief = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+`;
+
+const MyExperienceBriefInfo = styled.div`
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+`;
+
+const MyExperienceOrgImage = styled.div`
+  /* box-shadow: rgb(0 0 0 / 2%) 0px 1px 0px 0px; */
+  /* border-top: 1px solid rgb(255 255 255 / 80%); */
+  /* border-left: 1px solid rgb(255 255 255 / 80%); */
+  min-width: 128px;
+  max-width: 128px;
+`;
+
+const MyExperienceDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+
+  letter-spacing: 0.025em;
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+`;
 
 interface MyExperienceItemProps {
   organizationImageSRC: string | StaticImport;
@@ -26,9 +95,9 @@ function MyExperienceItem({
   details,
 }: MyExperienceItemProps) {
   return (
-    <div className={styles.myExperienceItem}>
-      <div className={styles.myExperienceBrief}>
-        <div className={styles.myExperienceOrgImage}>
+    <MyExperienceItemRoot>
+      <MyExperienceBrief>
+        <MyExperienceOrgImage>
           <Image
             src={organizationImageSRC}
             width={5 * 20}
@@ -42,30 +111,26 @@ function MyExperienceItem({
               height: "auto",
             }}
           />
-        </div>
-        <div className={styles.myExperienceBriefInfo}>
+        </MyExperienceOrgImage>
+        <MyExperienceBriefInfo>
           <div>
             {location} - {locationType}
           </div>
           <div>
             {startingTime} - {endingTime}
           </div>
-        </div>
-      </div>
-      <div
-        className={`text-xl font-normal tracking-wide ${styles.myExperienceDetails}`}
-      >
-        {details}
-      </div>
-    </div>
+        </MyExperienceBriefInfo>
+      </MyExperienceBrief>
+      <MyExperienceDetails>{details}</MyExperienceDetails>
+    </MyExperienceItemRoot>
   );
 }
 
 export default function MyExperience() {
   return (
     <React.Fragment>
-      <div className={styles.myExperienceRoot}>
-        <div className={styles.myExperienceListContainer}>
+      <MyExperienceRoot>
+        <MyExperienceListContainer>
           <MyExperienceItem
             {...{
               organizationImageSRC: dyteLogo,
@@ -122,8 +187,8 @@ export default function MyExperience() {
             }}
           />
           {/* <button>Resume</button> */}
-        </div>
-      </div>
+        </MyExperienceListContainer>
+      </MyExperienceRoot>
     </React.Fragment>
   );
 }
