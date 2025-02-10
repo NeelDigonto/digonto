@@ -52,6 +52,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     npm ci --include=dev
 
 FROM base AS prodbuild
+ENV NODE_ENV=production
 COPY --from=proddeps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
@@ -60,6 +61,7 @@ RUN npm prune --production
 FROM base AS prod
 # USER node
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
 
 # RUN addgroup --system --gid 1001 nodejs
 # RUN adduser --system --uid 1001 nextjs

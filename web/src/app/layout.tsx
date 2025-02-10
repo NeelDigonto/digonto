@@ -3,9 +3,9 @@ import { Inter } from "next/font/google";
 import "@pigment-css/react/styles.css";
 // import "@/styles/reset.css";
 // import "@/styles/globals.css";
-import Header from "@/components/Header";
+import Header from "@/components/Header/Header";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { globalCss, styled } from "@pigment-css/react";
+import { globalCss } from "@pigment-css/react";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-expressions
 globalCss`
@@ -160,18 +160,6 @@ body {
 }
 `;
 
-const BGCanvas = styled.canvas`
-  position: fixed;
-  z-index: -1;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-`;
-
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
@@ -216,15 +204,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const conditionalGA =
+    process.env.NODE_ENV === "production" ? (
+      <GoogleAnalytics gaId="G-D43WEFWZBE" />
+    ) : null;
+
   return (
     <html lang="en">
       {/* <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> */}
       <body className={inter.variable}>
-        <BGCanvas id="canvas" />
         <Header />
         {children}
       </body>
-      <GoogleAnalytics gaId="G-D43WEFWZBE" />
+      {conditionalGA}
     </html>
   );
 }

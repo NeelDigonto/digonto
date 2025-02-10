@@ -17,11 +17,11 @@ services:
     image: 953253449063.dkr.ecr.us-west-2.amazonaws.com/digonto/web:latest
     environment:
       PORT: 3000
+      NODE_ENV: "production"
     # volumes:
     #   - web-next-meta:/app/.next/
     ports:
       - 3000:3000
-
 
 volumes:
   web-next-meta: {}

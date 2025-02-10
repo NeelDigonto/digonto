@@ -157,7 +157,7 @@ const HeaderNavLink = styled(NextLink)`
   line-height: 2rem;
 `;
 
-export default function Header() {
+export default function DefaultHeader() {
   const [isMenuExpanded, setIsMenuExpanded] = React.useState<boolean>(false);
 
   return (
