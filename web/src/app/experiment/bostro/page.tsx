@@ -40,32 +40,6 @@ const DragArea = styled.div`
   } */
 `;
 
-const SplitDragArea = styled.div`
-  background-color: darkgreen;
-  height: 100%;
-  min-width: 2px;
-  max-width: 2px;
-  position: absolute;
-
-  /* :hover & {
-    cursor: col-resize;
-    width: 8px;
-    max-width: 8px;
-    color: red;
-    overflow: auto;
-  } */
-`;
-
-const CanvasContainer = styled.div`
-  display: block;
-  position: relative;
-
-  :focus {
-    outline: none;
-  }
-  grid-area: canvas;
-`;
-
 const R3FCanvasRoot = styled(R3FCanvas)`
   width: 100%;
   height: 100%;
@@ -99,24 +73,21 @@ const EditorDragger = styled.div`
 `;
 
 export default function Bostro() {
-  // const canvasContainerRef = React.useRef<HTMLDivElement>(null);
-  // const canvasRef = React.useRef<HTMLCanvasElement>(null);
-  // const canvasContainerUUID = "ExperimentCanvasContainer";
-  // const canvasUUID = "ExperimentCanvas";
+  const editorAreaRef = React.useRef<HTMLDivElement>(
+    null
+  ) as unknown as React.RefObject<HTMLDivElement>;
 
   return (
     <RootContainer>
       <BostroNavbar />
       <BostroSidebar />
-      <EditorArea>
+      <EditorArea ref={editorAreaRef}>
         <ViewTrackingArea>
           <Editor3D />
           <EditorDragger />
           <PatternEditor />
         </ViewTrackingArea>
-        <R3FCanvasRoot
-        // eventSource={document.getElementById(canvasContainerUUID)!}
-        >
+        <R3FCanvasRoot eventSource={editorAreaRef}>
           <View.Port />
         </R3FCanvasRoot>
       </EditorArea>

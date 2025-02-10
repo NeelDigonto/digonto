@@ -20,7 +20,10 @@ function Box(props: any) {
       ref={meshRef}
       scale={active ? 1.5 : 1}
       onClick={() => setActive(!active)}
-      onPointerOver={() => setHover(true)}
+      onPointerOver={() => {
+        setHover(true);
+        console.log("YUooooo");
+      }}
       onPointerOut={() => setHover(false)}
     >
       <boxGeometry args={[1, 1, 1]} />
@@ -32,7 +35,7 @@ function Box(props: any) {
 export default function PatternEditor() {
   return (
     <View
-      index={1}
+      index={2}
       style={{
         width: "100%",
         height: "100%",
