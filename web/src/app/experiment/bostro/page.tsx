@@ -7,6 +7,8 @@ import { Canvas as R3FCanvas } from "@react-three/fiber";
 import { View } from "@react-three/drei";
 import BostroSidebar from "@/components/Sidebar/BostroSidebar";
 import PatternEditor from "@/components/Bostro/PatternEditor/PatternEditor";
+// import Editor3D from "@/components/Bostro/Editor3D/Editor3D_v1";
+// import Editor3D2 from "@/components/Bostro/Editor3D/Editor3D2";
 import Editor3D from "@/components/Bostro/Editor3D/Editor3D";
 
 const RootContainer = styled.div`
@@ -50,7 +52,7 @@ const EditorArea = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
-  background-color: black;
+  background-color: #303035;
 
   grid-area: editor;
 `;
@@ -73,9 +75,7 @@ const EditorDragger = styled.div`
 `;
 
 export default function Bostro() {
-  const editorAreaRef = React.useRef<HTMLDivElement>(
-    null
-  ) as unknown as React.RefObject<HTMLDivElement>;
+  const editorAreaRef = React.useRef<HTMLDivElement>(null!);
 
   return (
     <RootContainer>
@@ -87,7 +87,7 @@ export default function Bostro() {
           <EditorDragger />
           <PatternEditor />
         </ViewTrackingArea>
-        <R3FCanvasRoot eventSource={editorAreaRef}>
+        <R3FCanvasRoot shadows eventSource={editorAreaRef}>
           <View.Port />
         </R3FCanvasRoot>
       </EditorArea>
