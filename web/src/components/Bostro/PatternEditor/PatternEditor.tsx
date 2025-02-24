@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import * as THREE from "three";
-import { PerspectiveCamera, View } from "@react-three/drei";
+import { MapControls, PerspectiveCamera, View } from "@react-three/drei";
 import { useControls } from "leva";
 
 import {
@@ -47,7 +47,7 @@ export default function PatternEditor() {
       }}
     >
       {/* <color attach="background" args={["#303035"]} /> */}
-      <PerspectiveCamera makeDefault position={[10, 12, 12]} fov={25} />
+      <PerspectiveCamera makeDefault position={[0, 20, 0]} fov={25} />
       <group position={[0, -0.5, 0]}>
         <Center top>
           <Suzi rotation={[-0.63, 0, 0]} scale={2} />
@@ -67,7 +67,7 @@ export default function PatternEditor() {
         <ShadowsCached />
         <Grid position={[0, -0.01, 0]} args={gridSize} {...gridConfig} />
       </group>
-      <OrbitControls makeDefault />
+      <MapControls makeDefault />
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
       <Environment files={suspend(city) as any} />
       {/* <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
@@ -89,7 +89,7 @@ function Shadows() {
       frames={100}
       color="#9d4b4b"
       colorBlend={0.5}
-      alphaTest={0.9}
+      alphaTest={0.75}
       scale={20}
     >
       <RandomizedLight amount={8} radius={4} position={[5, 5, -10]} />
