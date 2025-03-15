@@ -4,7 +4,7 @@ import BostroExplorer from "@/components/Bostro/Explorer/Explorer";
 import { styled } from "@pigment-css/react";
 import React from "react";
 import { Canvas as R3FCanvas } from "@react-three/fiber";
-import { View } from "@react-three/drei";
+// import { View } from "@react-three/drei";
 import BostroSidebar from "@/components/Sidebar/BostroSidebar";
 import PatternEditor from "@/components/Bostro/PatternEditor/PatternEditor";
 // import Editor3D from "@/components/Bostro/Editor3D/Editor3D_v1";
@@ -83,13 +83,56 @@ export default function Bostro() {
       <BostroSidebar />
       <EditorArea ref={editorAreaRef}>
         <ViewTrackingArea>
-          <Editor3D />
+          {/* <View
+            index={1}
+            style={{
+              width: "100%",
+              height: "100%",
+              flexGrow: 1,
+              flexBasis: 0,
+            }}
+          >
+            <Editor3D />
+          </View>
           <EditorDragger />
-          <PatternEditor />
+          <View
+            index={2}
+            style={{
+              width: "100%",
+              height: "100%",
+              flexGrow: 1,
+              flexBasis: 0,
+            }}
+          >
+            <PatternEditor />
+          </View> */}
+          <R3FCanvasRoot
+            shadows
+            style={{
+              width: "100%",
+              height: "100%",
+              flexGrow: 1,
+              flexBasis: 0,
+            }}
+          >
+            <Editor3D />
+          </R3FCanvasRoot>
+          <EditorDragger />
+          <R3FCanvasRoot
+            shadows
+            style={{
+              width: "100%",
+              height: "100%",
+              flexGrow: 1,
+              flexBasis: 0,
+            }}
+          >
+            <PatternEditor />
+          </R3FCanvasRoot>
         </ViewTrackingArea>
-        <R3FCanvasRoot shadows eventSource={editorAreaRef}>
+        {/* <R3FCanvasRoot shadows eventSource={editorAreaRef}>
           <View.Port />
-        </R3FCanvasRoot>
+        </R3FCanvasRoot> */}
       </EditorArea>
       <DragArea />
       <BostroExplorer />
