@@ -2,8 +2,7 @@
 import * as React from "react";
 import * as THREE from "three";
 import { MapControls, PerspectiveCamera } from "@react-three/drei";
-import { useControls } from "leva";
-
+//import { useControls } from "leva";
 import {
   Grid,
   AccumulativeShadows,
@@ -18,7 +17,7 @@ const city = import("@pmndrs/assets/hdri/city.exr").then(
 );
 
 export default function PatternEditor() {
-  const { gridSize, ...gridConfig } = useControls(
+  /* const { gridSize, ...gridConfig } = useControls(
     "PatternEditor",
     {
       gridSize: [10.5, 10.5],
@@ -34,7 +33,21 @@ export default function PatternEditor() {
       infiniteGrid: true,
     },
     { collapsed: true }
-  );
+  ); */
+
+  const { gridSize, ...gridConfig } = {
+    gridSize: [10.5, 10.5] as [number, number],
+    cellSize: 0.6,
+    cellThickness: 1,
+    cellColor: "#6f6f6f",
+    sectionSize: 3.3,
+    sectionThickness: 1.5,
+    sectionColor: "#9d4b4b",
+    fadeDistance: 50,
+    fadeStrength: 1,
+    followCamera: false,
+    infiniteGrid: true,
+  };
 
   const boxRef = React.useRef<THREE.Mesh>(null!);
 

@@ -1,0 +1,1 @@
+cmake --build -j --preset=win-msvc-rel && .\\build\\win-msvc-rel\\libs\\sandbox\\sandbox.exe

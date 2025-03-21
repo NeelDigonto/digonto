@@ -1,0 +1,1 @@
+cmake --build -j --preset=wasm32-emcc-rel && .\\build\\wasm32-emcc-rel\\samples\\basic_web\\basic_web
