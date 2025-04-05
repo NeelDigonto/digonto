@@ -83,29 +83,6 @@ export default function Bostro() {
       <BostroSidebar />
       <EditorArea ref={editorAreaRef}>
         <ViewTrackingArea>
-          {/* <View
-            index={1}
-            style={{
-              width: "100%",
-              height: "100%",
-              flexGrow: 1,
-              flexBasis: 0,
-            }}
-          >
-            <Editor3D />
-          </View>
-          <EditorDragger />
-          <View
-            index={2}
-            style={{
-              width: "100%",
-              height: "100%",
-              flexGrow: 1,
-              flexBasis: 0,
-            }}
-          >
-            <PatternEditor />
-          </View> */}
           <R3FCanvasRoot
             shadows
             style={{
@@ -167,3 +144,28 @@ export default function Bostro() {
         </Canvas>
       </CanvasContainer>
 */
+
+/*
+          {/* <View
+            index={1}
+            style={{
+              width: "100%",
+              height: "100%",
+              flexGrow: 1,
+              flexBasis: 0,
+            }}
+          >
+            <Editor3D />
+          </View>
+          <EditorDragger />
+          <View
+            index={2}
+            style={{
+              width: "100%",
+              height: "100%",
+              flexGrow: 1,
+              flexBasis: 0,
+            }}
+          >
+            <PatternEditor />
+          </View> */

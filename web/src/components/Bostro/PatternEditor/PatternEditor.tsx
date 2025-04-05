@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
-import * as THREE from "three";
-import { MapControls, PerspectiveCamera } from "@react-three/drei";
+import { MapControls, OrthographicCamera } from "@react-three/drei";
 //import { useControls } from "leva";
 import {
   Grid,
@@ -11,6 +10,7 @@ import {
 } from "@react-three/drei";
 import { suspend } from "suspend-react";
 import { EffectComposer, Outline } from "@react-three/postprocessing";
+import Box from "@/core/Box";
 
 const city = import("@pmndrs/assets/hdri/city.exr").then(
   (module) => module.default
@@ -49,7 +49,10 @@ export default function PatternEditor() {
     infiniteGrid: true,
   };
 
-  const boxRef = React.useRef<THREE.Mesh>(null!);
+  /* const boxRef = React.useRef<THREE.Mesh>(null!); */
+
+  React.useEffect(() => {}, []);
+  // const positions = new Float32Array([1, 0, 0, 0, 1, 0, -1, 0, 0, 0, -1, 0]);
 
   return (
     <>
@@ -59,11 +62,11 @@ export default function PatternEditor() {
           edgeStrength={2}
           pulseSpeed={0.1}
           visibleEdgeColor={0xffffff}
-          selection={[boxRef]}
+          /* selection={[boxRef]} */
         />
       </EffectComposer>
       <color attach="background" args={["#303035"]} />
-      <PerspectiveCamera makeDefault position={[0, 20, 0]} fov={25} />
+      <OrthographicCamera makeDefault zoom={100} position={[0, 10, 0]} />
       <Environment
         environmentIntensity={0.2}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -71,11 +74,26 @@ export default function PatternEditor() {
       />
       <MapControls makeDefault />
       <Grid position={[0, 0, 0]} args={gridSize} {...gridConfig} />
-      <group rotation={[Math.PI / 2, 0, 0]} position={[0, 0.125, 0]}>
+      {/* <group rotation={[Math.PI / 2, 0, 0]} position={[0, 0.125, 0]}>
         <mesh castShadow position={[0, 0, 0]} ref={boxRef}>
           <boxGeometry args={[2, 2, 0.001]} />
           <meshStandardMaterial color="#ff9999" />
         </mesh>
+        <mesh position={[0, 0, -0.5]}>
+          <bufferGeometry>
+            <bufferAttribute
+              args={[positions, 3]}
+              attach="attributes-position"
+              array={positions}
+              count={positions.length / 3}
+              itemSize={3}
+            />
+          </bufferGeometry>
+          <meshStandardMaterial color="#fff" side={THREE.DoubleSide} />
+        </mesh>
+      </group> */}
+      <group rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.125, 0]}>
+        <Box />
       </group>
       <ShadowsCached />
     </>
