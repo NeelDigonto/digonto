@@ -1,32 +1,29 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "allowJs": false,
-    "removeComments": true,
-    "resolveJsonModule": true,
-    "typeRoots": ["./node_modules/@types"],
-    "sourceMap": true,
-    "outDir": "dist",
-    "strict": true,
-    "lib": ["DOM", "ESNext"],
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "declaration": true,
-    "moduleResolution": "Node",
-    "skipLibCheck": false,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": [
-    "src/**/*",
-    "__tests__/**/*",
-    "migrations/**/*",
-    "jest.config.ts"
-  ],
-  "exclude": ["node_modules"]
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "allowJs": false,
+        "removeComments": true,
+        "resolveJsonModule": true,
+        "strictPropertyInitialization": false,
+        "types": ["vitest/globals", "@types/node"],
+        "sourceMap": true,
+        "outDir": "dist",
+        "strict": true,
+        "lib": ["DOM", "ESNext"],
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declaration": true,
+        "skipLibCheck": true,
+        "rootDir": ".",
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"]
+        }
+    },
+    "include": ["src/**/*.ts", "migrations/**/*"],
+    "exclude": ["node_modules", "dist", "tests"]
 }

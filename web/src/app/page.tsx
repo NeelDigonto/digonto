@@ -1,8 +1,7 @@
-import MyExperience from "@/components/MyExperience";
-import Hero from "@/components/Hero";
-import React from "react";
-import { Wrapper } from "@/components/FullBleed";
-import { BGCanvas } from "@/components/Canvas/BGCanvas";
+import BGCanvas from "@/components/canvas/BGCanvas";
+import Hero from "@/components/hero/Hero";
+import { Wrapper } from "@/components/layout/Wrapper";
+import MyExperience from "@/components/my-experience/MyExperience";
 
 export default function Home() {
   return (
@@ -15,5 +14,3 @@ export default function Home() {
     </>
   );
 }
-
-// #fadb92
