@@ -1,5 +1,14 @@
+import {
+  RootWSClientRequest,
+  RootWSServerResponse,
+  WSClientEventType,
+} from "@gateway/src/types/core";
+
+export type EventHandler = (event: RootWSServerResponse) => void;
+
 export class Engine {
   private ws: WebSocket;
+  eventHandlers: Map<string, EventHandler> = new Map<string, EventHandler>();
 
   constructor() {
     this.ws = new WebSocket("ws://localhost:8080");
@@ -16,14 +25,28 @@ export class Engine {
     };
 
     this.ws.onmessage = (event) => {
-      // console.log("Message received from server:", event.data);
+      if (event.type === "text" || event.type === "message") {
+        console.log("Received text message from server:", event.data);
+        if (event.data === "PING") {
+          // console.log("Received PING from server.");
 
-      if (event.data === "PING") {
-        // console.log("Received PING from server.");
+          if (this.ws.readyState === WebSocket.OPEN) {
+            this.ws.send("PONG");
+            // console.log("Sent PONG in response to PING.");
+          }
 
-        if (this.ws.readyState === WebSocket.OPEN) {
-          this.ws.send("PONG");
-          // console.log("Sent PONG in response to PING.");
+          return;
+        }
+
+        const serverEvent: RootWSServerResponse = JSON.parse(event.data);
+        console.log("Received server event:", serverEvent);
+
+        if (
+          serverEvent.referenceId &&
+          this.eventHandlers.has(serverEvent.referenceId)
+        ) {
+          this.eventHandlers.get(serverEvent.referenceId)!(serverEvent);
+          return;
         }
       }
     };
@@ -33,12 +56,48 @@ export class Engine {
     };
   }
 
-  sendMessage(message: object) {
-    if (this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify(message));
-      console.log("Message sent to server:", message);
-    } else {
-      console.error("WebSocket is not open. Cannot send message.");
+  registerEventhandler(id: string, eventHandler: EventHandler) {
+    this.eventHandlers.set(id, eventHandler);
+  }
+
+  deregisterEventhandler(id: string) {
+    this.eventHandlers.delete(id);
+  }
+
+  // sendMessage<T>(type: WSClientEventType, data: T) {
+  //   if (this.ws.readyState === WebSocket.OPEN) {
+  //     this.ws.send(JSON.stringify(data }));
+  //     console.log("Message sent to server:", { type, data });
+  //   } else {
+  //     console.error("WebSocket is not open. Cannot send message.");
+  //   }
+  // }
+
+  sendEvent(
+    type: WSClientEventType,
+    data: any,
+    handleChange: (event: RootWSServerResponse) => void
+  ): () => void {
+    const wsClientMessage: RootWSClientRequest = {
+      timestamp: new Date().toISOString(),
+      id: crypto.randomUUID(),
+      type,
+      data,
+    };
+
+    if (this.ws.readyState !== WebSocket.OPEN) {
+      throw new Error("WebSocket is not open. Cannot send message.");
     }
+
+    this.registerEventhandler(
+      wsClientMessage.id,
+      (event: RootWSServerResponse) => handleChange(event)
+    );
+
+    this.ws.send(JSON.stringify(wsClientMessage));
+
+    return () => {
+      this.deregisterEventhandler(wsClientMessage.id);
+    };
   }
 }

@@ -4,19 +4,21 @@ import { IncomingMessage } from 'http';
 import { ServerOptions, WebSocket, WebSocketServer } from 'ws';
 import { z } from 'zod';
 import { DigontoWSClient } from './WebSocketClient';
-import { SetRequired } from 'type-fest';
-import { authSession, NewAuthSession, NewUser, NewWebsocketSession, ORM, user, websocketSession } from '@/db/orm';
-import { Deps } from '@/types/core';
-import { Duplex } from 'stream';
+import {
+    AuthSession,
+    authSession,
+    NewWebsocketSession,
+    ORM,
+    User,
+    user,
+    WebsocketSession,
+    websocketSession,
+} from '@/db/orm';
+import { AuthenticatedRequest, Deps, NascentRequest } from '@/types/misc';
 import { randomUUID } from 'crypto';
 import cookie from 'cookie';
-
-export type NascentRequest = IncomingMessage & {
-    sessionId?: string;
-    requiresSetCookie?: boolean; // Indicates if the response should set a cookie
-};
-
-export type AuthenticatedRequest = SetRequired<NascentRequest, 'sessionId'>;
+import { eq } from 'drizzle-orm';
+import { RootWSClientRequest, rootWSClientRequestSchema, WSClientEventType } from '@/types/core';
 
 export class DigontoWSServer {
     logger: Logger;
@@ -77,7 +79,9 @@ export class DigontoWSServer {
     }
 
     private onListeningHandler(): void {
-        this.logger.log(`WebSocket Server is listening on port ${this.websocketServerOptions.port}`);
+        this.logger.log(
+            `WebSocket Server is listening on port ${this.websocketServerOptions.port}`,
+        );
     }
 
     private shouldHandle(
@@ -157,16 +161,26 @@ export class DigontoWSServer {
             this.clients.delete(sessionId);
         }
 
-        const client = new DigontoWSClient(this.logger, sessionId, nascentWS, () => {
-            this.clients.delete(sessionId);
-            this.logger.log(`Client ${sessionId} dropped`);
-        });
-        this.clients.set(sessionId, client);
+        this.handleNewClient().then(([user, authSession, websocketSession]) => {
+            nascentWS;
+            const client = new DigontoWSClient(
+                this.logger,
+                this.orm,
+                sessionId,
+                nascentWS,
+                { user, authSession, websocketSession },
+                () => {
+                    this.clients.delete(sessionId);
+                    this.logger.log(`Client ${sessionId} dropped`);
+                },
+            );
+            this.clients.set(sessionId, client);
 
-        // Set up cleanup when client disconnects
-        nascentWS.on('close', () => {
-            this.logger.log(`Client ${sessionId} disconnected`);
-            this.clients.delete(sessionId);
+            // Set up cleanup when client disconnects
+            nascentWS.on('close', () => {
+                this.logger.log(`Client ${sessionId} disconnected`);
+                this.clients.delete(sessionId);
+            });
         });
     }
 
@@ -178,51 +192,30 @@ export class DigontoWSServer {
         this.logger.log(`WebSocket Server closed. Code: ${code}, Reason: ${reason.toString()}`);
     }
 
-    private handleNewClient(nascentWS: WebSocket): void {
-        const newUser: NewUser = {
-            id: randomUUID(),
+    private async handleNewClient(): Promise<[User, AuthSession, WebsocketSession]> {
+        const [defaultUser] = await this.orm.db
+            .select()
+            .from(user)
+            .where(eq(user.name, 'Anonymous'))
+            .execute();
 
-            name: 'Anonymous',
-            userName: `anonymous-${randomUUID()}`,
-            avatarUrl: null,
-            bio: '',
-
-            email: ``,
-            emailVerified: false,
-            emailVerifiedAt: null,
-
-            isActive: true,
-            isSuspended: false,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        };
-
-        const [insertedUser] = this.orm.db.insert(user).values(newUser).returning().execute();
-
-        const newAuthSession: NewAuthSession = {
-            id: randomUUID(),
-            userId: insertedUser[0].id,
-            sessionId: randomUUID(),
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            expiresAt: new Date(Date.now() + 60 * 60 * 1000), // 1 hour expiration
-            isActive: true,
-            isAnonymous: true,
-        };
-
-        const [insertedAuthSession] = this.orm.db.insert(authSession).values(newAuthSession).returning().execute();
+        const [defaultAuthSession] = await this.orm.db
+            .select()
+            .from(authSession)
+            .where(eq(authSession.userId, defaultUser.id));
 
         const newWebsocketSession: NewWebsocketSession = {
             id: randomUUID(),
-            sessionId: insertedAuthSession[0].sessionId,
-            userId: insertedAuthSession[0].userId,
+            authSession: defaultAuthSession.id,
             createdAt: new Date(),
             updatedAt: new Date(),
         };
-        const [insertedWebsocketSession] = this.orm.db
+        const [currentWebsocketSession] = await this.orm.db
             .insert(websocketSession)
             .values(newWebsocketSession)
             .returning()
             .execute();
+
+        return [defaultUser, defaultAuthSession, currentWebsocketSession];
     }
 }

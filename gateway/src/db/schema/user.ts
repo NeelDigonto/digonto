@@ -1,6 +1,7 @@
 import { boolean, pgTable, text, uuid, timestamp } from 'drizzle-orm/pg-core';
 import { relations, sql } from 'drizzle-orm';
 import { authSession } from './auth_session';
+import { chatSession } from './chat';
 
 export const user = pgTable('user', {
     id: uuid('id').defaultRandom().primaryKey(),
@@ -30,4 +31,5 @@ export type NewUser = typeof user.$inferInsert;
 
 export const userRelations = relations(user, ({ many }) => ({
     authSession: many(authSession),
+    chatSession: many(chatSession),
 }));

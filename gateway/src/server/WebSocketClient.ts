@@ -1,15 +1,22 @@
-import { WSClientEvent, WSClientEventType } from '@/types/core';
+import { rootWSClientRequestSchema, WSClientEventType } from '@/types/core';
 import { Env, getEnv } from '@/utils/environment';
 import { Logger } from '@/utils/logger';
 import { WebSocket } from 'ws';
 
 import { GoogleGenAI } from '@google/genai';
+import { AuthSession, ORM, User, WebsocketSession } from '@/db/orm';
+import { ChatManager } from '@/modules/chat/ChatManager';
+import { WSDeps } from '@/types/misc';
 
 export class DigontoWSClient {
     logger: Logger;
+    orm: ORM;
     env: Env;
     ws: WebSocket;
     sessionId: string;
+    userDetails: { user: User; authSession: AuthSession; websocketSession: WebsocketSession };
+
+    private chatManager: ChatManager;
 
     private readonly HEARTBEAT_INTERVAL = 6_000; // 3 seconds
     private readonly CONNECTION_TIMEOUT = 30_000; // 30 seconds
@@ -22,20 +29,29 @@ export class DigontoWSClient {
 
     constructor(
         logger: Logger,
+        orm: ORM,
         sessionId: string,
         ws: WebSocket,
+        userDetails: { user: User; authSession: AuthSession; websocketSession: WebsocketSession },
         notifyServerOnClientDrop: (sessionId: string) => void,
-        private gemini = new GoogleGenAI({ apiKey: 'AIzaSyDjAh8DoqCeOvKHBQ7jhFfpICb94yxAG3w' }),
     ) {
         this.notifyServerOnClientDrop = notifyServerOnClientDrop.bind(null, sessionId);
         this.logger = logger;
+        this.orm = orm;
+        this.userDetails = userDetails;
         this.env = getEnv();
 
         this.sessionId = sessionId;
         this.ws = ws;
 
+        this.chatManager = new ChatManager(this.orm, { userId: userDetails.user.id });
+
         this.setupEventHandlers();
         this.startHeartbeat();
+
+        console.log(
+            `WebSocket client created for session ${this.sessionId}, user: ${userDetails.user.id}, authSession: ${userDetails.authSession.id}, websocketSession: ${userDetails.websocketSession.id}`,
+        );
     }
 
     private setupEventHandlers(): void {
@@ -61,7 +77,7 @@ export class DigontoWSClient {
         // Handle error, e.g., log it or clean up resources
     }
 
-    onMessageHandler(data: WebSocket.RawData, isBinary: boolean): void {
+    async onMessageHandler(data: WebSocket.RawData, isBinary: boolean): Promise<void> {
         // this.logger.log(`Received message for session ${this.sessionId}, isBinary: ${isBinary}, data: ${data}`);
 
         if (isBinary) {
@@ -82,38 +98,41 @@ export class DigontoWSClient {
                 return;
             }
 
-            const event: WSClientEvent = JSON.parse(message);
+            const eventRaw = JSON.parse(message);
+            console.log(`Received event for session ${this.sessionId}:`, eventRaw);
+            const event = rootWSClientRequestSchema.parse(eventRaw);
+
+            const userId = this.userDetails.user.id;
+            const wsDeps: WSDeps = {
+                eventReferenceId: event.id,
+                ws: this.ws,
+            };
 
             switch (event.type) {
-                case WSClientEventType.CREATE_CHAT:
-                    this.logger.debug(`Create chat event received for session ${this.sessionId}: ${event.data}`);
-                    // Handle create chat logic here
+                case WSClientEventType.CREATE_CHAT_SESSION:
+                    await this.chatManager.createChatSession({ ...event.data, userId }, wsDeps);
                     break;
-                case WSClientEventType.USER_MESSAGE:
-                    // this.logger.debug(`User message received for session ${this.sessionId}: ${event.data}`);
-                    this.gemini.models
-                        .generateContentStream({
-                            model: 'gemini-2.0-flash',
-                            contents: event.data.message,
-                        })
-                        .then(async (response) => {
-                            for await (const chunk of response) {
-                                if (chunk.text) {
-                                    console.log(chunk.text);
-                                }
-                            }
-                        });
+                case WSClientEventType.READ_ALL_CHAT_SESSIONS:
+                    await this.chatManager.readAllChatSessions({ userId }, wsDeps);
+                    break;
+                case WSClientEventType.PROCESS_USER_CHAT_MESSAGE:
+                    await this.chatManager.processUserChatMessage({ ...event.data }, wsDeps);
+                    break;
+                case WSClientEventType.READ_ALL_CHAT_MESSAGES:
+                    await this.chatManager.readAllChatMessages({ ...event.data }, wsDeps);
                     break;
 
                 default:
-                    this.logger.warn(`Unknown event type received for session ${this.sessionId}: ${event.type}`);
+                    this.logger.warn(`Unknown event type received for session ${this.sessionId}`);
                     break;
             }
         }
     }
 
     onCloseHandler(code: number, reason: string): void {
-        this.logger.log(`WebSocket closed for session ${this.sessionId}, code: ${code}, reason: ${reason}`);
+        this.logger.log(
+            `WebSocket closed for session ${this.sessionId}, code: ${code}, reason: ${reason}`,
+        );
         this.cleanup();
     }
 

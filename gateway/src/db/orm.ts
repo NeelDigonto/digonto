@@ -6,11 +6,18 @@ import { websocketSession, websocketSessionRelations } from './schema/websocket_
 import { withReplicas } from 'drizzle-orm/pg-core';
 import { getEnv } from '@/utils/environment';
 import { Logger } from '@/utils/logger';
+import {
+    chatMessage,
+    chatMessageRelations,
+    chatSession,
+    chatSessionRelations,
+} from './schema/chat';
 
 // Export all table schemas
 export * from './schema/user';
 export * from './schema/auth_session';
 export * from './schema/websocket_session';
+export * from './schema/chat';
 
 // Combined schema object
 const schema = {
@@ -20,6 +27,10 @@ const schema = {
     authSessionRelations,
     websocketSession,
     websocketSessionRelations,
+    chatSession,
+    chatSessionRelations,
+    chatMessage,
+    chatMessageRelations,
 } as const;
 
 // Infer the database type with schema
@@ -87,10 +98,13 @@ export class ORM {
                 }),
             );
 
-            this.db = withReplicas(writer, readers as [typeof writer, ...Array<typeof writer>]) as Database;
+            this.db = withReplicas(
+                writer,
+                readers as [typeof writer, ...Array<typeof writer>],
+            ) as Database;
         } else {
             this.db = drizzle(this.writerPool, {
-                logger: env.NODE_ENV === 'development',
+                logger: false,
                 schema,
             });
         }

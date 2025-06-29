@@ -9,6 +9,7 @@ import { Env, getEnv } from '@/utils/environment';
 import { requestId } from 'hono/request-id';
 import { xResponseTime } from '@/middleware/ResponseTime';
 import { Logger } from '@/utils/logger';
+import { assertDefaultUserInDB } from '@/utils/auth';
 
 export class CentralAPIServer {
     server: ServerType | null = null;

@@ -2,7 +2,7 @@ import { Context } from 'hono';
 import { ContentfulStatusCode } from 'hono/utils/http-status';
 import status from 'http-status';
 
-import { HTTPErrorResponseJson } from '@/utils/types';
+import { HTTPErrorResponseJson } from '@/types/core';
 import {
     DigontoError,
     DuplicateResourceError,

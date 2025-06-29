@@ -1,6 +1,7 @@
 import { ORM } from '@/db/orm';
 import { CentralAPIServer } from '@/server/CentralAPIServer';
 import { DigontoWSServer } from '@/server/WebSocketServer';
+import { assertDefaultUserInDB } from '@/utils/auth';
 import { Logger } from '@/utils/logger';
 import { tryGracefulAppExit } from '@/utils/misc';
 
@@ -12,6 +13,8 @@ async function main(): Promise<void> {
 
     try {
         logger.log('Starting Central API Server');
+
+        await assertDefaultUserInDB(orm);
 
         app = new CentralAPIServer(logger);
         wsServer = new DigontoWSServer({ logger, orm });
