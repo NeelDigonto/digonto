@@ -73,7 +73,7 @@ export class Engine {
   //   }
   // }
 
-  sendEvent(
+  private _sendEvent(
     type: WSClientEventType,
     data: any,
     handleChange: (event: RootWSServerResponse) => void
@@ -99,5 +99,30 @@ export class Engine {
     return () => {
       this.deregisterEventhandler(wsClientMessage.id);
     };
+  }
+
+  rpc<T>(type: WSClientEventType, data: any): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const cleanup = this._sendEvent(
+        type,
+        data,
+        (event: RootWSServerResponse) => {
+          if (event.error) {
+            reject(new Error(event.error.code + ": " + event.error.message));
+          } else {
+            resolve(event.data as T);
+          }
+          cleanup();
+        }
+      );
+    });
+  }
+
+  subscribe<T>(
+    type: WSClientEventType,
+    data: any,
+    handleChange: (event: RootWSServerResponse) => void
+  ): () => void {
+    return this._sendEvent(type, data, handleChange);
   }
 }
