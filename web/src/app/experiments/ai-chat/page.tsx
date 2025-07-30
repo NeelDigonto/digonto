@@ -6,6 +6,8 @@ import { Engine } from "@/core/Engine";
 import type {
   CreateChatSessionWSRequest,
   CreateChatSessionWSResponse,
+  ModelChatMessageWSStreamEndResponse,
+  ProcessUserChatMessageWSRequest,
   ReadAllChatMessagesWSResponse,
   ReadAllChatSessionsWSResponse,
 } from "@gateway/src/modules/chat/schema";
@@ -15,11 +17,13 @@ import {
   WSClientEventType,
   WSServerEventType,
 } from "@gateway/src/types/core";
+import { useWebSocketStore } from "@/stores/websocketState";
 
 export type WebChatSession = ReadAllChatSessionsWSResponse[number] & {
   messages: (ReadAllChatMessagesWSResponse[number] & {
     isStreaming: boolean;
   })[];
+  messageFetchStatus: "idle" | "loading" | "success" | "error";
 };
 
 export default function AiChatPage() {
@@ -28,6 +32,7 @@ export default function AiChatPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const isWebsocketOpen = useWebSocketStore((state) => state.open);
 
   const [chatSessions, setChatSessions] = useState<WebChatSession[]>([]);
   const [currentSession, setCurrentSession] = useState<WebChatSession | null>(
@@ -65,41 +70,164 @@ export default function AiChatPage() {
   }, [currentSession?.messages]);
   // ---------------------------------------------------------
 
+  useEffect(() => {
+    if (isWebsocketOpen) {
+      console.log("WebSocket is open, fetching chat sessions...");
+      window.engine
+        .rpc<ReadAllChatSessionsWSResponse>(
+          WSClientEventType.READ_ALL_CHAT_SESSIONS,
+          {}
+        )
+        .then((sessions) => {
+          console.log("Fetched chat sessions:", sessions);
+          const formattedSessions: WebChatSession[] = sessions.map(
+            (session) => ({
+              ...session,
+              messages: [],
+              messageFetchStatus: "idle",
+            })
+          );
+          setChatSessions(formattedSessions);
+        });
+    }
+  }, [isWebsocketOpen]);
+
   const createNewSession = async () => {
     const newSession: CreateChatSessionWSRequest = {
-      title: "New Chat",
+      title: `New Chat ${new Date().toISOString()}`,
     };
 
-    const clearEventRegister = await window.engine.sendEvent(
+    const response = await window.engine.rpc<CreateChatSessionWSResponse>(
       WSClientEventType.CREATE_CHAT_SESSION,
-      newSession,
-      (event: RootWSServerResponse) => {
-        if (event.type === WSServerEventType.CREATE_CHAT_SESSION_RESPONSE) {
-          const createdSession: CreateChatSessionWSResponse = event.data;
-          setChatSessions((prev) => [
-            {
-              ...createdSession,
-              messages: [],
-            },
-            ...prev,
-          ]);
-
-          setCurrentSession({
-            ...createdSession,
-            messages: [],
-          });
-
-          setIsSidebarOpen(false);
-        }
-      }
+      newSession
     );
 
-    clearEventRegister();
+    const createdSession: WebChatSession = {
+      ...response,
+      messages: [],
+      messageFetchStatus: "success",
+    };
+
+    setChatSessions((prev) => [createdSession, ...prev]);
+    setCurrentSession(createdSession);
+    setIsSidebarOpen(false);
   };
 
   const selectSession = (session: WebChatSession) => {
     setCurrentSession(session);
     setIsSidebarOpen(false);
+
+    if (session.messageFetchStatus === "idle") {
+      setCurrentSession((prev) => {
+        if (!prev) return null;
+
+        // Fetch messages for the selected session
+        window.engine
+          .rpc<ReadAllChatMessagesWSResponse>(
+            WSClientEventType.READ_ALL_CHAT_MESSAGES,
+            { chatSessionId: session.id }
+          )
+          .then((messages) => {
+            const updatedSession: WebChatSession = {
+              ...prev,
+              messages: messages.map((msg) => ({ ...msg, isStreaming: false })),
+              messageFetchStatus: "success",
+            };
+            setCurrentSession(updatedSession);
+          })
+          .catch((error) => {
+            console.error("Error fetching chat messages:", error);
+            setCurrentSession((prev) => {
+              if (!prev) return null;
+              return { ...prev, messageFetchStatus: "error" };
+            });
+          });
+
+        return prev;
+      });
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!input.trim() || isLoading) return;
+
+    // TODO: Create a new session if none exists
+    if (!currentSession) {
+      throw new Error(
+        "No chat session selected. Please create or select a chat session."
+      );
+    }
+
+    setInput("");
+    setIsLoading(true);
+
+    const userMessage: ProcessUserChatMessageWSRequest = {
+      chatSessionId: currentSession.id,
+      content: input.trim(),
+    };
+
+    const endStream = await window.engine.stream<RootWSServerResponse>(
+      WSClientEventType.PROCESS_USER_CHAT_MESSAGE,
+      userMessage,
+      (event: RootWSServerResponse) => {
+        if (event.type === WSServerEventType.CREATE_CHAT_MESSAGE_RESPONSE) {
+          const newMessage = event.data;
+          setCurrentSession((prev) => {
+            if (!prev) return null;
+
+            return {
+              ...prev,
+              messages: [
+                ...prev.messages,
+                { ...newMessage, isStreaming: false },
+              ],
+            };
+          });
+        } else if (
+          event.type === WSServerEventType.MODEL_CHAT_MESSAGE_STREAMING_RESPONSE
+        ) {
+          const streamingMessage =
+            event.data as ReadAllChatMessagesWSResponse[number];
+
+          setCurrentSession((prev) => {
+            if (!prev) return null;
+
+            const updatedMessages = prev.messages.map((msg) =>
+              msg.id === streamingMessage.id
+                ? {
+                    ...msg,
+                    content: msg.content + streamingMessage.content,
+                    isStreaming: true,
+                  }
+                : msg
+            );
+            return { ...prev, messages: updatedMessages };
+          });
+        } else if (
+          event.type === WSServerEventType.MODEL_CHAT_MESSAGE_STREAM_END
+        ) {
+          const streamingEndMessage =
+            event.data as ModelChatMessageWSStreamEndResponse;
+
+          setCurrentSession((prev) => {
+            if (!prev) return null;
+
+            const updatedMessages = prev.messages.map((msg) =>
+              msg.id === streamingEndMessage.id
+                ? {
+                    ...msg,
+                    isStreaming: false,
+                  }
+                : msg
+            );
+            return { ...prev, messages: updatedMessages };
+          });
+
+          endStream();
+          setIsLoading(false);
+        }
+      }
+    );
   };
 
   /* const handleSendMessage = async () => {
@@ -224,8 +352,6 @@ export default function AiChatPage() {
       setIsLoading(false);
     }
   }; */
-
-  const handleSendMessage = async () => {};
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {

@@ -8,7 +8,7 @@ import {
     ORM,
 } from '@/db/orm';
 import { GoogleGenAI, Chat as GeminiChat } from '@google/genai';
-import { and, eq, SQL } from 'drizzle-orm';
+import { and, desc, eq, SQL } from 'drizzle-orm';
 import {
     CreateChatSessionParams,
     ReadAllChatSessionsWSResponse,
@@ -19,6 +19,7 @@ import {
     ProcessUserChatMessageParams,
     createChatMessageWSResponse,
     ModelChatMessageWSStreamingResponse,
+    ModelChatMessageWSStreamEndResponse,
 } from '@/modules/chat/schema';
 import { ForbiddenError, InternalServerError } from '@/utils/errors';
 import { sendWSEvent } from '@/utils/misc';
@@ -77,9 +78,16 @@ export class ChatManager {
 
             this.chatSessionDetailMap.set(createdChatSession.id, chatSessionDetail);
 
+            const transformedChatSession: CreateChatSessionWSResponse = {
+                id: createdChatSession.id,
+                title: createdChatSession.title,
+                createdAt: createdChatSession.createdAt,
+                updatedAt: createdChatSession.updatedAt,
+            };
+
             sendWSEvent(
                 WSServerEventType.CREATE_CHAT_SESSION_RESPONSE,
-                createdChatSession satisfies CreateChatSessionWSResponse,
+                transformedChatSession satisfies CreateChatSessionWSResponse,
                 deps,
             );
             return true;
@@ -98,6 +106,7 @@ export class ChatManager {
                     .select()
                     .from(chatSession)
                     .where(and(...conditions))
+                    .orderBy(desc(chatSession.updatedAt))
                     .execute()) ?? [];
 
             for (const chatSession of chatSessions) {
@@ -109,9 +118,18 @@ export class ChatManager {
                 this.chatSessionDetailMap.set(chatSession.id, chatSessionDetail);
             }
 
+            const transformedChatSessions: ReadAllChatSessionsWSResponse = chatSessions.map(
+                (session) => ({
+                    id: session.id,
+                    title: session.title,
+                    createdAt: session.createdAt,
+                    updatedAt: session.updatedAt,
+                }),
+            );
+
             sendWSEvent(
                 WSServerEventType.READ_ALL_CHAT_SESSIONS_RESPONSE,
-                chatSessions satisfies ReadAllChatSessionsWSResponse,
+                transformedChatSessions satisfies ReadAllChatSessionsWSResponse,
                 deps,
             );
             return true;
@@ -133,12 +151,21 @@ export class ChatManager {
                 throw new ForbiddenError('Chat session not found');
             }
 
-            const geminiChat = chatSessionDetail.geminiChat;
-            if (!geminiChat) {
-                throw new InternalServerError(`Gemini chat not found for session ${chatSessionId}`);
+            if (!chatSessionDetail.geminiChat) {
+                // throw new InternalServerError(`Gemini chat not found for session ${chatSessionId}`);
+                chatSessionDetail.geminiChat = this.gemini.chats.create({
+                    model: 'gemini-2.5-flash',
+                    history: chatSessionDetail.chatMessages.map((message) => ({
+                        role: message.role,
+                        content: message.content,
+                    })),
+                    config: {},
+                });
             }
 
-            const newChatMessage: NewChatMessage = {
+            const geminiChat = chatSessionDetail.geminiChat;
+
+            const newUserChatMessage: NewChatMessage = {
                 chatSessionId,
                 role: 'user',
                 content,
@@ -146,15 +173,30 @@ export class ChatManager {
                 updatedAt: new Date(),
             };
 
-            const [createdChatMessage] = await this.orm.db
+            let finalChatMessageContent = '';
+            const newModelChatMessage: NewChatMessage = {
+                chatSessionId,
+                role: 'model',
+                content: finalChatMessageContent,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            };
+
+            const [createdUserChatMessage, createdModelChatMessage] = await this.orm.db
                 .insert(chatMessage)
-                .values(newChatMessage)
+                .values([newUserChatMessage, newModelChatMessage])
                 .returning()
                 .execute();
 
             sendWSEvent(
                 WSServerEventType.CREATE_CHAT_MESSAGE_RESPONSE,
-                createdChatMessage satisfies createChatMessageWSResponse,
+                createdUserChatMessage satisfies createChatMessageWSResponse,
+                deps,
+            );
+
+            sendWSEvent(
+                WSServerEventType.CREATE_CHAT_MESSAGE_RESPONSE,
+                createdModelChatMessage satisfies createChatMessageWSResponse,
                 deps,
             );
 
@@ -169,14 +211,16 @@ export class ChatManager {
             for await (const chunk of responseStream) {
                 if (chunk.text) {
                     const modelChatMessageChunk: ModelChatMessageWSStreamingResponse = {
-                        id: createdChatMessage.id,
+                        id: createdModelChatMessage.id,
                         chunkNumber: chunkNumber++,
-                        chatSessionId: createdChatMessage.chatSessionId,
+                        chatSessionId: createdModelChatMessage.chatSessionId,
                         role: 'model',
                         content: chunk.text,
                         createdAt: new Date(),
                         updatedAt: new Date(),
                     };
+
+                    finalChatMessageContent += chunk.text;
 
                     sendWSEvent(
                         WSServerEventType.MODEL_CHAT_MESSAGE_STREAMING_RESPONSE,
@@ -185,6 +229,25 @@ export class ChatManager {
                     );
                 }
             }
+
+            sendWSEvent(
+                WSServerEventType.MODEL_CHAT_MESSAGE_STREAM_END,
+                {
+                    id: createdModelChatMessage.id,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                } satisfies ModelChatMessageWSStreamEndResponse,
+                deps,
+            );
+
+            await this.orm.db
+                .update(chatMessage)
+                .set({
+                    content: finalChatMessageContent,
+                    updatedAt: new Date(),
+                })
+                .where(eq(chatMessage.id, createdModelChatMessage.id))
+                .execute();
 
             chatSessionDetail.isGeneratingContent = false;
 
@@ -213,14 +276,15 @@ export class ChatManager {
                 (await this.orm.db
                     .select()
                     .from(chatMessage)
+                    .leftJoin(chatSession, eq(chatMessage.chatSessionId, chatSession.id))
                     .where(and(...conditions))
                     .execute()) ?? [];
 
             if (chatMessages.length) {
-                chatSessionDetail.chatMessages = chatMessages;
+                chatSessionDetail.chatMessages = chatMessages.map((_) => _.chat_message);
                 chatSessionDetail.geminiChat = this.gemini.chats.create({
                     model: 'gemini-2.5-flash',
-                    history: chatMessages
+                    history: chatSessionDetail.chatMessages
                         .filter((chatMessage) => chatMessage.role !== 'system')
                         .map((message) => ({
                             role: message.role,
@@ -232,7 +296,7 @@ export class ChatManager {
 
             sendWSEvent(
                 WSServerEventType.READ_ALL_CHAT_MESSAGES_RESPONSE,
-                chatMessages satisfies ReadAllChatMessagesWSResponse,
+                chatSessionDetail.chatMessages satisfies ReadAllChatMessagesWSResponse,
                 deps,
             );
 

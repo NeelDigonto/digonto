@@ -149,7 +149,7 @@ export class DigontoWSServer {
     }
 
     private onConnectionHandler(nascentWS: WebSocket, request: AuthenticatedRequest): void {
-        this.logger.log(`WebSocket Client connected with session ID: ${request.sessionId}`);
+        // this.logger.log(`WebSocket Client connected with session ID: ${request.sessionId}`);
         // console.log('Session ID:', request.sessionId);
 
         const sessionId = request.sessionId;

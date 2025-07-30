@@ -30,7 +30,7 @@ export function sendWSEvent<T>(type: WSServerEventType, data: any, deps: WSDeps)
         error: null, // Set to null if no error
     };
 
-    console.log('Sending WebSocket event:', message);
+    // console.log('Sending WebSocket event:', message);
 
     try {
         const event = JSON.stringify(message);

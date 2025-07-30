@@ -49,9 +49,9 @@ export class DigontoWSClient {
         this.setupEventHandlers();
         this.startHeartbeat();
 
-        console.log(
-            `WebSocket client created for session ${this.sessionId}, user: ${userDetails.user.id}, authSession: ${userDetails.authSession.id}, websocketSession: ${userDetails.websocketSession.id}`,
-        );
+        // console.log(
+        //     `WebSocket client created for session ${this.sessionId}, user: ${userDetails.user.id}, authSession: ${userDetails.authSession.id}, websocketSession: ${userDetails.websocketSession.id}`,
+        // );
     }
 
     private setupEventHandlers(): void {
@@ -78,7 +78,9 @@ export class DigontoWSClient {
     }
 
     async onMessageHandler(data: WebSocket.RawData, isBinary: boolean): Promise<void> {
-        // this.logger.log(`Received message for session ${this.sessionId}, isBinary: ${isBinary}, data: ${data}`);
+        // this.logger.log(
+        //     `Received message for session ${this.sessionId}, isBinary: ${isBinary}, data: ${data}`,
+        // );
 
         if (isBinary) {
             // Handle binary data
@@ -99,7 +101,7 @@ export class DigontoWSClient {
             }
 
             const eventRaw = JSON.parse(message);
-            console.log(`Received event for session ${this.sessionId}:`, eventRaw);
+            // console.log(`Received event for session ${this.sessionId}:`, eventRaw);
             const event = rootWSClientRequestSchema.parse(eventRaw);
 
             const userId = this.userDetails.user.id;

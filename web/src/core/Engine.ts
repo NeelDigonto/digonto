@@ -1,8 +1,10 @@
 import {
   RootWSClientRequest,
   RootWSServerResponse,
+  rootWSServerResponseSchema,
   WSClientEventType,
 } from "@gateway/src/types/core";
+import { useWebSocketStore } from "@/stores/websocketState";
 
 export type EventHandler = (event: RootWSServerResponse) => void;
 
@@ -18,15 +20,20 @@ export class Engine {
   private setupEventHandlers(): void {
     this.ws.onopen = () => {
       console.log("WebSocket connection established.");
+      setTimeout(() => {
+        useWebSocketStore.setState({ open: true });
+      }, 100);
+      // useWebSocketStore((state) => state.setOPEN());
     };
 
     this.ws.onerror = (error) => {
       console.error("WebSocket error:", error);
+      useWebSocketStore.setState({ open: false });
     };
 
     this.ws.onmessage = (event) => {
       if (event.type === "text" || event.type === "message") {
-        console.log("Received text message from server:", event.data);
+        // console.log("Received text message from server:", event.data);
         if (event.data === "PING") {
           // console.log("Received PING from server.");
 
@@ -38,14 +45,18 @@ export class Engine {
           return;
         }
 
-        const serverEvent: RootWSServerResponse = JSON.parse(event.data);
-        console.log("Received server event:", serverEvent);
+        const __serverEvent: RootWSServerResponse = JSON.parse(event.data);
+        const parsedServerEvent: RootWSServerResponse =
+          rootWSServerResponseSchema.parse(__serverEvent);
+        console.log("Received server event:", parsedServerEvent);
 
         if (
-          serverEvent.referenceId &&
-          this.eventHandlers.has(serverEvent.referenceId)
+          parsedServerEvent.referenceId &&
+          this.eventHandlers.has(parsedServerEvent.referenceId)
         ) {
-          this.eventHandlers.get(serverEvent.referenceId)!(serverEvent);
+          this.eventHandlers.get(parsedServerEvent.referenceId)!(
+            parsedServerEvent
+          );
           return;
         }
       }
@@ -53,6 +64,7 @@ export class Engine {
 
     this.ws.onclose = (event) => {
       console.log("WebSocket connection closed:", event.code, event.reason);
+      useWebSocketStore.setState({ open: false });
     };
   }
 
@@ -73,7 +85,7 @@ export class Engine {
   //   }
   // }
 
-  sendEvent(
+  private _sendEvent(
     type: WSClientEventType,
     data: any,
     handleChange: (event: RootWSServerResponse) => void
@@ -94,10 +106,36 @@ export class Engine {
       (event: RootWSServerResponse) => handleChange(event)
     );
 
+    console.log("Sending event to server:", wsClientMessage);
     this.ws.send(JSON.stringify(wsClientMessage));
 
     return () => {
       this.deregisterEventhandler(wsClientMessage.id);
     };
+  }
+
+  rpc<T>(type: WSClientEventType, data: any): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const cleanup = this._sendEvent(
+        type,
+        data,
+        (event: RootWSServerResponse) => {
+          if (event.error) {
+            reject(new Error(event.error.code + ": " + event.error.message));
+          } else {
+            resolve(event.data as T);
+          }
+          cleanup();
+        }
+      );
+    });
+  }
+
+  stream<T>(
+    type: WSClientEventType,
+    data: any,
+    handleChange: (event: RootWSServerResponse) => void
+  ): () => void {
+    return this._sendEvent(type, data, handleChange);
   }
 }
