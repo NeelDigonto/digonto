@@ -35,3 +35,13 @@ export const isTest = process.env.NODE_ENV === "test";
 // export const isWebSocketSupported = isBrowser && "WebSocket" in window;
 // export const isFetchSupported = isBrowser && "fetch" in window;
 //
+
+export interface BlogPostMeta {
+  title: string;
+  excerpt: string;
+  slug: string;
+  date: string;
+  readTime: string;
+  coverImage?: string;
+  tags: string[];
+}

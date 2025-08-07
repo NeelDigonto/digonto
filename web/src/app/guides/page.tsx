@@ -20,9 +20,9 @@ export default function GuidesPage() {
           Guides
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-400 mb-12">
-          In-depth tutorials and technical guides for modern web development
+          In-depth tutorials and technical guides for cool stuff.
         </p>
-        
+
         {guides.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-2xl text-gray-500 dark:text-gray-400 mb-4">
@@ -55,22 +55,32 @@ export default function GuidesPage() {
                     </h3>
                   </div>
                   <time className="text-sm text-gray-500 dark:text-gray-400">
-                    {new Date(guide.date).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
+                    {new Date(guide.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
                     })}
                   </time>
                 </div>
-                
+
                 <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                   {guide.description}
                 </p>
-                
+
                 <div className="mt-4 flex items-center text-[#667eea] font-medium">
-                  Read more 
-                  <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  Read more
+                  <svg
+                    className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </div>
               </Link>
