@@ -75,7 +75,7 @@ export default function DataPipelineSegregationIncident() {
         >
           <div className="relative rounded-lg overflow-hidden border border-white/10">
             <Image
-              src="/session-incident-slack-dark.png"
+              src="/session-incident-slack-dark-blurred.png"
               alt="Slack notification showing the production incident alert"
               width={800}
               height={400}
@@ -297,7 +297,7 @@ export default function DataPipelineSegregationIncident() {
               queries were waiting behind numerous DB update queries.
             </p>
             <p className="mb-6">
-              To understand why it's an issue, we need to understand that
+              To understand why it&apos;s an issue, we need to understand that
               session broadly processes 3 types of events:
             </p>
             <div className="space-y-3 mb-6">
@@ -608,7 +608,7 @@ export default function DataPipelineSegregationIncident() {
                 The Database Might Not Be the Bottleneck
               </h3>
               <p className="text-white/80">
-                Sometimes the issue isn't database performance but how your
+                Sometimes the issue isn&apos;t database performance but how your
                 application accesses it. Connection pool exhaustion can make a
                 healthy database appear overloaded.
               </p>
@@ -622,7 +622,7 @@ export default function DataPipelineSegregationIncident() {
                 Load Testing ≠ Production Reality
               </h3>
               <p className="text-white/80">
-                Our load tests didn't catch this because they focused on
+                Our load tests didn&apos;t catch this because they focused on
                 throughput, not the interaction between different query types
                 competing for the same resources.
               </p>
@@ -659,11 +659,11 @@ export default function DataPipelineSegregationIncident() {
           >
             <h2 className="painterly-h2 mb-6">One Year Later</h2>
             <p className="mb-8 max-w-2xl mx-auto">
-              It's been over a year now, and we've hardly ever faced sessions-ms
-              performance degradation, even though our platform usage grew 100%
-              each quarter. The incident that initially seemed like a disaster
-              became a valuable learning experience that made our system more
-              resilient.
+              It&apos;s been over a year now, and we&apos;ve hardly ever faced
+              sessions-ms performance degradation, even though our platform
+              usage grew 100% each quarter. The incident that initially seemed
+              like a disaster became a valuable learning experience that made
+              our system more resilient.
             </p>
             <div className="flex justify-center gap-8 text-center">
               <div>

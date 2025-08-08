@@ -2,7 +2,6 @@
 
 import { Wrapper } from "@/components/layout/Wrapper";
 import Link from "next/link";
-import Image from "next/image";
 import { BlogPostMeta } from "../../../types/core";
 import { motion } from "framer-motion";
 import { FiArrowRight, FiClock, FiCalendar } from "react-icons/fi";
@@ -34,7 +33,8 @@ export default function BlogPage() {
             Blog
           </h1>
           <p className="text-xl text-gray-400 max-w-2xl">
-            Deep dives into production incidents, system design, and lessons learned from building scalable systems.
+            Deep dives into production incidents, system design, and lessons
+            learned from building scalable systems.
           </p>
         </motion.div>
 
@@ -64,10 +64,9 @@ export default function BlogPage() {
                   >
                     {/* Hover effect background */}
                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-cyan-500/5 group-hover:via-purple-500/5 group-hover:to-pink-500/5 transition-all duration-500 rounded-2xl" />
-                    
+
                     {/* Content container */}
                     <div className="relative p-8 border border-white/10 rounded-2xl group-hover:border-white/20 transition-all duration-300 backdrop-blur-sm bg-black/20">
-                      
                       {/* Date and read time */}
                       <div className="flex items-center gap-6 mb-4 text-sm">
                         <div className="flex items-center gap-2 text-gray-500">
@@ -108,7 +107,7 @@ export default function BlogPage() {
                             </span>
                           ))}
                         </div>
-                        
+
                         {/* Read more arrow */}
                         <div className="flex items-center gap-2 text-purple-400 group-hover:text-cyan-400 transition-colors">
                           <span className="text-sm font-medium">Read more</span>
@@ -120,7 +119,7 @@ export default function BlogPage() {
                     {/* Number indicator */}
                     <div className="absolute -left-12 top-8 hidden lg:flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30">
                       <span className="text-sm font-bold text-cyan-400">
-                        {String(index + 1).padStart(2, '0')}
+                        {String(index + 1).padStart(2, "0")}
                       </span>
                     </div>
                   </Link>
@@ -128,15 +127,13 @@ export default function BlogPage() {
               ))}
             </div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
               className="mt-20 text-center"
             >
-              <p className="text-gray-500 italic">
-                More posts coming soon...
-              </p>
+              <p className="text-gray-500 italic">More posts coming soon...</p>
             </motion.div>
           </>
         )}

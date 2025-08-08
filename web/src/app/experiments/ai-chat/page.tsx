@@ -472,7 +472,7 @@ export default function AiChatPage() {
             <div className={styles.welcomeMessage}>
               <div className={styles.welcomeIcon}>✨</div>
               <h2>Hello! How can I help you today?</h2>
-              <p>Ask me anything, and I'll do my best to assist you.</p>
+              <p>Ask me anything, and I&apos;ll do my best to assist you.</p>
             </div>
           ) : (
             currentSession.messages.map((message) => (
