@@ -17,7 +17,10 @@ export function getEnv(): Env {
         const parseResult = envSchema.safeParse(process.env);
 
         if (!parseResult.success) {
-            throw new Error('Parsing Env variables failed!\n' + JSON.stringify(parseResult.error.issues, null, 2));
+            throw new Error(
+                'Parsing Env variables failed!\n' +
+                    JSON.stringify(parseResult.error.issues, null, 2),
+            );
         }
 
         cachedEnv = parseResult.data;

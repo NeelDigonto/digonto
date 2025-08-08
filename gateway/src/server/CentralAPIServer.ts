@@ -68,7 +68,9 @@ export class CentralAPIServer {
                     port,
                 },
                 (info) => {
-                    this.logger.log(`Central API Server listening on http://localhost:${String(info.port)}`);
+                    this.logger.log(
+                        `Central API Server listening on http://localhost:${String(info.port)}`,
+                    );
                     clearTimeout(timerId);
                     resolve();
                 },

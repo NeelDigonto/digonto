@@ -1,5 +1,9 @@
 // Set the prototype explicitly to maintain the correct prototype chain
-import { RedirectStatusCode, ClientErrorStatusCode, ServerErrorStatusCode } from 'hono/utils/http-status';
+import {
+    RedirectStatusCode,
+    ClientErrorStatusCode,
+    ServerErrorStatusCode,
+} from 'hono/utils/http-status';
 import status from 'http-status';
 
 export class DigontoError extends Error {

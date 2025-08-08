@@ -13,7 +13,7 @@ COPY . .
 CMD ["npm", "run", "dev"]
 
 
-FROM base as test
+FROM base as citest
 ENV NODE_ENV test
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
@@ -22,6 +22,16 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 USER node
 COPY . .
 RUN npm run test
+
+FROM base as lintcheck
+ENV NODE_ENV test
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm ci --include=dev
+USER node
+COPY . .
+RUN npm run lint
 
 
 FROM base as proddeps
