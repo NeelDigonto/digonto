@@ -24,7 +24,7 @@ jobs:
       - name: Test Web
         uses: docker/build-push-action@v5
         with:
-          context: ./web
+          context: .
           file: ./web/Dockerfile
           push: false
           tags: digonto.in/web-test:latest
@@ -46,7 +46,7 @@ jobs:
       - name: Web Lint Check
         uses: docker/build-push-action@v5
         with:
-          context: ./web
+          context: .
           file: ./web/Dockerfile
           push: false
           tags: digonto.in/web-lint:latest
@@ -83,7 +83,7 @@ jobs:
       - name: Gateway Lint Check
         uses: docker/build-push-action@v5
         with:
-          context: ./gateway
+          context: .
           file: ./gateway/Dockerfile
           push: false
           tags: digonto.in/gateway-lint:latest
@@ -105,7 +105,7 @@ jobs:
       - name: Format Check Gateway
         uses: docker/build-push-action@v5
         with:
-          context: ./gateway
+          context: .
           file: ./gateway/Dockerfile
           push: false
           tags: digonto.in/gateway-format:latest
@@ -145,7 +145,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./gateway
+          context: .
           file: ./gateway/Dockerfile
           push: true
           tags: |
@@ -187,7 +187,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./web
+          context: .
           file: ./web/Dockerfile
           push: true
           tags: |
