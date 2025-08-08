@@ -39,15 +39,15 @@ ENV NODE_ENV production
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
+    npm ci --include=dev
 
-FROM base as prodbuild
+FROM proddeps as prodbuild
 COPY --from=proddeps /usr/src/app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 RUN npm prune --production
 
-FROM base as prod
+FROM prodbuild as prod
 USER node
 COPY --from=prodbuild /usr/src/app/node_modules ./node_modules
 COPY --from=prodbuild /usr/src/app/package.json ./package.json
