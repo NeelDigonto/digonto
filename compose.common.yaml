@@ -10,11 +10,13 @@ services:
       - 5432:5432
   gateway:
     build:
-      context: gateway
+      context: .
+      dockerfile: gateway/Dockerfile
     environment:
       PORT: 4000
     volumes:
       - ./gateway/:/app/
+      - ./packages/:/packages/
       - gateway-nodemodules:/app/node_modules
     depends_on:
       - postgres
