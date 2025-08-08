@@ -3,7 +3,7 @@ import {
   RootWSServerResponse,
   rootWSServerResponseSchema,
   WSClientEventType,
-} from "@gateway/src/types/core";
+} from "@digonto/shared-schemas";
 import { useWebSocketStore } from "@/stores/websocketState";
 
 export type EventHandler = (event: RootWSServerResponse) => void;

@@ -17,7 +17,7 @@ import {
     ReadAllChatMessagesWSResponse,
     CreateChatSessionWSResponse,
     ProcessUserChatMessageParams,
-    createChatMessageWSResponse,
+    CreateChatMessageWSResponse,
     ModelChatMessageWSStreamingResponse,
     ModelChatMessageWSStreamEndResponse,
 } from '@/modules/chat/schema';
@@ -190,13 +190,13 @@ export class ChatManager {
 
             sendWSEvent(
                 WSServerEventType.CREATE_CHAT_MESSAGE_RESPONSE,
-                createdUserChatMessage satisfies createChatMessageWSResponse,
+                createdUserChatMessage satisfies CreateChatMessageWSResponse,
                 deps,
             );
 
             sendWSEvent(
                 WSServerEventType.CREATE_CHAT_MESSAGE_RESPONSE,
-                createdModelChatMessage satisfies createChatMessageWSResponse,
+                createdModelChatMessage satisfies CreateChatMessageWSResponse,
                 deps,
             );
 

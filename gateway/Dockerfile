@@ -67,7 +67,7 @@ COPY . .
 RUN npm run build
 RUN npm prune --production
 
-FROM base as prod
+FROM prodbuild as prod
 USER node
 COPY --from=prodbuild /app/node_modules ./node_modules
 COPY --from=prodbuild /app/package.json ./package.json
