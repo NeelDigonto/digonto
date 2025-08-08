@@ -15,15 +15,15 @@ import SelectionHighlight from "../../../components/SelectionHighlight";
 import "../../../styles/blog-painterly.css";
 import { codeExamples } from "./code";
 
-export const meta: BlogPostMeta = {
-  title: "The Incident That Taught Me Data Pipeline Segregation",
-  excerpt:
-    "How a critical production incident during a 5000-participant webinar revealed the importance of separating database connection pools for different query priorities.",
-  slug: "the-incident-that-taught-me-data-pipeline-segregation",
-  date: "2025-08-01",
-  readTime: "10 min read",
-  tags: ["Backend", "Database", "Performance", "Production"],
-};
+// export const meta: BlogPostMeta = {
+//   title: "The Incident That Taught Me Data Pipeline Segregation",
+//   excerpt:
+//     "How a critical production incident during a 5000-participant webinar revealed the importance of separating database connection pools for different query priorities.",
+//   slug: "the-incident-that-taught-me-data-pipeline-segregation",
+//   date: "2025-08-01",
+//   readTime: "10 min read",
+//   tags: ["Backend", "Database", "Performance", "Production"],
+// };
 
 export default function DataPipelineSegregationIncident() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
