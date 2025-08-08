@@ -10,13 +10,13 @@ import type {
   ProcessUserChatMessageWSRequest,
   ReadAllChatMessagesWSResponse,
   ReadAllChatSessionsWSResponse,
-} from "@gateway/src/modules/chat/schema";
-import {
   RootWSClientRequest,
   RootWSServerResponse,
+} from "@digonto/shared-schemas";
+import {
   WSClientEventType,
   WSServerEventType,
-} from "@gateway/src/types/core";
+} from "@digonto/shared-schemas";
 import { useWebSocketStore } from "@/stores/websocketState";
 
 export type WebChatSession = ReadAllChatSessionsWSResponse[number] & {
