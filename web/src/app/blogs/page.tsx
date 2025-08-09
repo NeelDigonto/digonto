@@ -13,7 +13,7 @@ const blogPosts: BlogPostMeta[] = [
     excerpt:
       "How a critical production incident during a 5000-participant webinar revealed the importance of separating database connection pools for different query priorities.",
     slug: "the-incident-that-taught-me-data-pipeline-segregation",
-    date: "2024-12-15",
+    date: "2025-08-10",
     readTime: "10 min read",
     tags: ["Backend", "Database", "Performance", "Production"],
   },
@@ -30,7 +30,7 @@ export default function BlogPage() {
           className="mb-16"
         >
           <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-            Blog
+            Blogs
           </h1>
           <p className="text-xl text-gray-400 max-w-2xl">
             Deep dives into production incidents, system design, and lessons
@@ -59,7 +59,7 @@ export default function BlogPage() {
                   className="group relative"
                 >
                   <Link
-                    href={`/blog/${post.slug}`}
+                    href={`/blogs/${post.slug}`}
                     className="block relative overflow-hidden"
                   >
                     {/* Hover effect background */}

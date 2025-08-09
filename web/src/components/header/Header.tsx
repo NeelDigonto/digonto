@@ -39,7 +39,7 @@ export default function Header() {
                 Guides
               </Link>
               <Link
-                href="/blog"
+                href="/blogs"
                 className="text-3xl font-semibold tracking-[0.025em] text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] py-4 px-6 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/15 hover:border-white/20 hover:scale-[1.02] hover:translate-x-1 transition-all duration-300"
                 onClick={() => setIsMenuExpanded(false)}
               >
@@ -59,7 +59,7 @@ export default function Header() {
       <header
         className={`fixed top-0 h-[var(--header-height)] w-full z-[800] px-2 md:px-4 flex flex-col justify-center items-center transition-all duration-500 ${
           !isHomePage || isScrolled
-            ? "bg-white/5 backdrop-saturate-180 backdrop-blur-[20px] backdrop-brightness-[85%] shadow-[0_8px_32px_0_rgba(31,38,135,0.1)] border-b border-white/18 dark:bg-black/70 dark:backdrop-brightness-50 dark:border-white/10"
+            ? "bg-white/5 backdrop-saturate-180 backdrop-blur-[20px] backdrop-brightness-[85%] shadow-[0_8px_32px_0_rgba(31,38,135,0.1)] border-b border-white/18 dark:bg-black/5 dark:backdrop-brightness-50 dark:border-white/10"
             : "bg-transparent backdrop-filter-none border-b border-transparent shadow-none"
         }`}
       >
@@ -110,7 +110,7 @@ export default function Header() {
               Guides
             </Link>
             <Link
-              href="/blog"
+              href="/blogs"
               className={`tracking-[0.025em] font-medium text-2xl leading-8 no-underline relative transition-all duration-200 py-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:transition-[width] after:duration-300 hover:after:w-full ${
                 isHomePage && !isScrolled
                   ? "text-white drop-shadow-[0_4px_8px_rgba(0,0,0,1)] hover:text-white after:bg-gradient-to-r after:from-white after:to-gray-200"

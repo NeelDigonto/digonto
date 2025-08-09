@@ -46,7 +46,7 @@ export default function DataPipelineSegregationIncident() {
           <span className="painterly-gradient">Data Pipeline Segregation</span>
         </h1>
         <div className="painterly-meta flex items-center gap-4 mb-16">
-          <span>August 1, 2025</span>
+          <span>August 10, 2025</span>
           <span>•</span>
           <span>10 min read</span>
           <span>•</span>
@@ -61,8 +61,7 @@ export default function DataPipelineSegregationIncident() {
         >
           <p className="text-xl leading-relaxed">
             It was a usual Sunday afternoon, things were chill and suddenly I
-            hear the familiar Slack notification. It was my manager tagging me
-            on a live-support incident.
+            hear the familiar Slack notification. A new live-support incident.
           </p>
         </motion.section>
 
